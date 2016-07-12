@@ -1,11 +1,11 @@
 <?php
 require 'connect.php';
 if (isset(
-    $_POST['writeid'], 
-    $_POST['writetitle'], 
-    $_POST['writename'], 
-    $_POST['writeemail'], 
-    $_POST['writegender'], 
+    $_POST['writeid'],
+    $_POST['writetitle'],
+    $_POST['writename'],
+    $_POST['writeemail'],
+    $_POST['writegender'],
     $_POST['writecontent'])
 ) {
     $id=$_POST['writeid'];

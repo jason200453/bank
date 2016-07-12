@@ -1,10 +1,10 @@
 <?php
 require 'connect.php';
 if (isset(
-    $_POST['writetitle'], 
-    $_POST['writename'], 
-    $_POST['writeemail'], 
-    $_POST['writegender'], 
+    $_POST['writetitle'],
+    $_POST['writename'],
+    $_POST['writeemail'],
+    $_POST['writegender'],
     $_POST['writecontent'])
 ) {
     $titleitle=$_POST['writetitle'];
