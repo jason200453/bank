@@ -1,5 +1,5 @@
 <?php
-require 'connect.php';
+require'connect.php';
 if (isset(
     $_POST['writetitle'],
     $_POST['writename'],

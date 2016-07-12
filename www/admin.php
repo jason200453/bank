@@ -3,7 +3,7 @@ session_start();
 if ($_SESSION['v']!="yes") {
     header("location:login.php");
 }
-require 'connect.php';
+require'connect.php';
 $query=mysql_query('SELECT * FROM message ORDER BY id desc')
 
 ?>
