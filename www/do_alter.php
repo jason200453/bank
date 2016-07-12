@@ -1,6 +1,13 @@
 <?php
 require 'connect.php';
-if (isset($_POST['writeid'], $_POST['writetitle'], $_POST['writename'], $_POST['writeemail'], $_POST['writegender'], $_POST['writecontent'])) {
+if (isset(
+    $_POST['writeid'], 
+    $_POST['writetitle'], 
+    $_POST['writename'], 
+    $_POST['writeemail'], 
+    $_POST['writegender'], 
+    $_POST['writecontent'])
+) {
     $id=$_POST['writeid'];
     $title=$_POST['writetitle'];
     $name=$_POST['writename'];
