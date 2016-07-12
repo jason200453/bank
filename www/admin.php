@@ -4,7 +4,7 @@ if ($_SESSION['v']!="yes") {
     header("location:login.php");
 }
 require'connect.php';
-$query=mysql_query('SELECT * FROM message ORDER BY id desc')
+$query = mysql_query('SELECT * FROM message ORDER BY id desc')
 
 ?>
 <html>
@@ -31,7 +31,7 @@ $query=mysql_query('SELECT * FROM message ORDER BY id desc')
             <p>&nbsp;</p>
 <?php
 for ($i = 1; $i <= mysql_num_rows($query); $i++) {
-    $message=mysql_fetch_assoc($query);
+    $message = mysql_fetch_assoc($query);
 
 ?>
         <div>
