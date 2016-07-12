@@ -6,6 +6,5 @@ $name=$_POST['writename'];
 $email=$_POST['writeemail'];
 $gender=$_POST['writegender'];
 $content=$_POST['writecontent'];
-mysql_query("update message set title='$title',name='$name',email='$email',gender='$gender',content='$content' where id='$id'");
+$query=mysql_query("UPDATE message SET title='$title',name='$name',email='$email',gender='$gender',content='$content' where id='$id'");
 header("location:admin.php");
-?>

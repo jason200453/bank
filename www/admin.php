@@ -1,11 +1,10 @@
 <?php 
 session_start();
-if($_SESSION['v']!="yes"){
- header("location:login.php");
+if ($_SESSION['v']!="yes") {
+    header("location:login.php");
 }
-
-require("connect.php");
-$data=mysql_query('select * from message order by id desc')//讓資料由最新呈現到最舊
+require 'connect.php';
+$query=mysql_query('SELECT * FROM message ORDER BY id desc')
 ?>
 
 
@@ -17,14 +16,14 @@ $data=mysql_query('select * from message order by id desc')//讓資料由最新�
 
 <body>
 <div>
- <div class="container">
-     <ul>
+<div class="container">
+    <ul>
          <a href="message_index.php">Home</a>
     </ul>
     <ul>
           <a href="login.php">Log In</a>
     </ul>
-     <ul>
+    <ul>
          <a href="message_index.php">Log out</a>
     </ul>
     </div>
@@ -37,8 +36,8 @@ $data=mysql_query('select * from message order by id desc')//讓資料由最新�
 <p>&nbsp;</p>
 
 <?php
-for($i=1;$i<=mysql_num_rows($data);$i++){
- $message=mysql_fetch_assoc($data);
+for($i=1;$i<=mysql_num_rows($query);$i++){
+ $message=mysql_fetch_assoc($query);
 ?>
 <div>
     <div class="main">
@@ -70,7 +69,10 @@ for($i=1;$i<=mysql_num_rows($data);$i++){
  </div>
 </div>
 <br />
-<?php } ?>
+<?php 
+} 
+
+?>
 
 
 </body>

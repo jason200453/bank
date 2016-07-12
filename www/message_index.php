@@ -1,7 +1,7 @@
 <?php 
 require 'connect.php';
-?>
 
+?>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -24,9 +24,10 @@ require 'connect.php';
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <?php
-$data=mysql_query("select * from message");
-for($i=1;$i<=mysql_num_rows($data);$i++){
- $message=mysql_fetch_assoc($data);
+$query=mysql_query("SELECT * FROM message");
+for($i=1;$i<=mysql_num_rows($query);$i++){
+ $message=mysql_fetch_assoc($query);
+ 
 ?>
 <div>
     <div class="main">
@@ -54,7 +55,10 @@ for($i=1;$i<=mysql_num_rows($data);$i++){
  </div>
 </div>
 <br />
-<?php } ?>
+<?php
+}
+
+?>
 
 
 </body>

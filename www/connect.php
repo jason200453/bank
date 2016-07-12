@@ -1,11 +1,8 @@
 <?php
 $con = mysql_connect("192.168.121.130","jason","MA6LzTwehLUvdPBZ");
-if (!$con)
-  {
-  die('Could not connect: ' . mysql_error());
-  }
+if (!$con) {
+    die('Could not connect: ' . mysql_error());
+}
 mysql_select_db("message");
 mysql_query("set names 'utf8'");
-mysql_query("select * from  message")
-?>
 

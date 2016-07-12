@@ -1,11 +1,10 @@
 <?php
 require 'connect.php';
 $id=$_GET['id'];
-$data=mysql_query("select * from message where id='$id'");
-for($i=1;$i<=mysql_num_rows($data);$i++){
-$message=mysql_fetch_assoc($data);
-
-
+$query = mysql_query("SELECT * FROM message WHERE id='$id'");
+for ($i = 1; $i <= mysql_num_rows($query); $i++) {
+    $message=mysql_fetch_assoc($query);
+    
 ?>
 <html>
     <head>
@@ -32,4 +31,7 @@ $message=mysql_fetch_assoc($data);
         </form>
     </body>
 </html>
-<?php } ?>
+<?php 
+}
+
+?>
