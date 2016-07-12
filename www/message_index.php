@@ -24,7 +24,7 @@ require'connect.php';
 <?php
 $query=mysql_query("SELECT * FROM message");
 for ($i = 1; $i <=mysql_num_rows($query); $i++) {
-    $message=mysql_fetch_assoc($query);
+    $message = mysql_fetch_assoc($query);
 
 ?>
         <div>

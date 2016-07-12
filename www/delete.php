@@ -5,7 +5,7 @@ if ($_SESSION['v']!="yes") {
 }
 require'connect.php';
 if (isset($_GET['id'])) {
-    $id=$_GET['id'];
+    $id = $_GET['id'];
 }
-$query=mysql_query("DELETE FROM message WHERE id = '$id'");
+$query = mysql_query("DELETE FROM message WHERE id = '$id'");
 header("location:admin.php");

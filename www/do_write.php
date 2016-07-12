@@ -8,12 +8,12 @@ if (isset(
     $_POST['writecontent'])
 ) {
     $titleitle=$_POST['writetitle'];
-    $name=$_POST['writename'];
-    $email=$_POST['writeemail'];
-    $gender=$_POST['writegender'];
-    $content=$_POST['writecontent'];
+    $name = $_POST['writename'];
+    $email = $_POST['writeemail'];
+    $gender = $_POST['writegender'];
+    $content = $_POST['writecontent'];
     if (isset($messageName)) {
-        $query=mysql_query("INSERT INTO message VALUE('$title','$name','$email','$gender','$content','')");
+        $query = mysql_query("INSERT INTO message VALUE('$title', '$name','$email', '$gender', '$content', '')");
         header("location:message_index.php");
     }
 }
