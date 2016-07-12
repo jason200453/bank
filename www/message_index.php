@@ -9,7 +9,7 @@ require 'connect.php';
 </head>
 <body>
 <div>
- <div class="container">
+ <div>
      <ul>
          <a href="message_index.php">Home</a>
     </ul>
@@ -18,19 +18,19 @@ require 'connect.php';
     </ul>
     </div>
 </div>
-<div class="container">
+<div>
  <a href="write_message.php"><button type="button">我要留言</button></a>
 </div>     
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <?php
 $query=mysql_query("SELECT * FROM message");
-for($i=1;$i<=mysql_num_rows($query);$i++){
- $message=mysql_fetch_assoc($query);
+for ($i = 1; $i <=mysql_num_rows($query); $i++) {
+    $message=mysql_fetch_assoc($query);
  
 ?>
 <div>
-    <div class="main">
+    <div>
       <table align="center">
             <tr>
               <td><?php echo $message['title']?></td>
@@ -59,7 +59,5 @@ for($i=1;$i<=mysql_num_rows($query);$i++){
 }
 
 ?>
-
-
 </body>
 </html>

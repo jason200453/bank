@@ -4,7 +4,7 @@ $id=$_GET['id'];
 $query = mysql_query("SELECT * FROM message WHERE id='$id'");
 for ($i = 1; $i <= mysql_num_rows($query); $i++) {
     $message=mysql_fetch_assoc($query);
-    
+
 ?>
 <html>
     <head>

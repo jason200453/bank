@@ -5,18 +5,16 @@ if ($_SESSION['v']!="yes") {
 }
 require 'connect.php';
 $query=mysql_query('SELECT * FROM message ORDER BY id desc')
+        
 ?>
-
-
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>管理員頁面</title>
 </head>
-
 <body>
 <div>
-<div class="container">
+    <div>
     <ul>
          <a href="message_index.php">Home</a>
     </ul>
@@ -28,19 +26,18 @@ $query=mysql_query('SELECT * FROM message ORDER BY id desc')
     </ul>
     </div>
 </div>
-<div class="container">
-  <h3>管理員頁面</h3>
-</div>
-      
+<div>
+<h3>管理員頁面</h3>
+</div>      
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-
 <?php
-for($i=1;$i<=mysql_num_rows($query);$i++){
- $message=mysql_fetch_assoc($query);
+for ($i = 1;$i <= mysql_num_rows($query); $i++) {
+    $message=mysql_fetch_assoc($query);
+
 ?>
 <div>
-    <div class="main">
+    <div>
       <table align="center">
             <tr>
               <td><?php echo $message['title']?></td>
@@ -73,7 +70,5 @@ for($i=1;$i<=mysql_num_rows($query);$i++){
 } 
 
 ?>
-
-
 </body>
 </html>

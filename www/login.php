@@ -1,18 +1,18 @@
 <?php
 session_start();
-if (isset($_POST['usr'])){
-    require("connect.php");
+if (isset($_POST['usr'])) {
+    require 'connect.php';
     $username=$_POST['usr'];
     $password=$_POST['pwd'];
     $query=mysql_query("SELECT * FROM  account WHERE username = '$username' and password = '$password'");
     if (!$query) {
         die('Could not connect: ' . mysql_error());
     }
-    if (mysql_num_rows($query)>=1) {
-    header("location:admin.php");
-    $_SESSION['v']="yes";
+    if (mysql_num_rows($query) >= 1) {
+        header("location:admin.php");
+        $_SESSION['v']="yes";
     } else {
-    header("location:login.php");
+        header("location:login.php");
     }
 }
 

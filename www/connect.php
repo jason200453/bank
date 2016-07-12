@@ -5,4 +5,3 @@ if (!$con) {
 }
 mysql_select_db("message");
 mysql_query("set names 'utf8'");
-

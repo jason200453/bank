@@ -1,7 +1,3 @@
-<?php
-require 'connect.php';
-
-?>
 <html>
     <head>
         <title>我要留言</title>
