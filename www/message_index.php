@@ -16,7 +16,7 @@ require'connect.php';
                 <a href="login.php">Log In</a>
             </ul>
         </div>
-        <div
+        <div>
             <a href="write_message.php"><button type="button">我要留言</button></a>
         </div>
             <p>&nbsp;</p>
