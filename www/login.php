@@ -24,10 +24,10 @@ if (isset($_POST['usr'])) {
     </head>
     <body>
         <form id="form" name="form" method="post" action="">
-           <label>帳號:</label>
-           <input type="text" name="usr" id="writetitle"/><br>
-           <label>密碼:</label>
-           <input type="text" name="pwd" id="writename"/><br>
+            <label>帳號:</label>
+            <input type="text" name="usr" id="writetitle"/><br>
+            <label>密碼:</label>
+            <input type="text" name="pwd" id="writename"/><br>
             <input type="submit" name="button" id="button" value="登入"/>
             <a href="message_index.php"><button type="button">回留言板</button></a>
         </form>
