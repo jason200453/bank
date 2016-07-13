@@ -13,8 +13,8 @@ if (isset(
     $gender = $_POST['writegender'];
     $content = $_POST['writecontent'];
     if (isset($name)) {
-        $query = mysql_query("INSERT INTO message VALUE('$title', '$name',
-        '$email', '$gender', '$content', '')");
+        $query = mysql_query("INSERT INTO message VALUE('$title', '$name', ".
+            "'$email', '$gender', '$content', '')");
         header("location:message_index.php");
     } else {
         header("location:write_message.php");
