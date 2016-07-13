@@ -4,7 +4,8 @@ if (isset($_POST['usr'])) {
     require'connect.php';
     $username = $_POST['usr'];
     $password = $_POST['pwd'];
-    $query = mysql_query("SELECT * FROM  account WHERE username = '$username' and password = '$password'");
+    $query = mysql_query("SELECT * FROM  account WHERE username = '$username'
+    and password = '$password'");
     if (!$query) {
         die('Could not connect: ' . mysql_error());
     }
