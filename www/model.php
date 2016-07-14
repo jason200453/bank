@@ -1,22 +1,23 @@
 <?php
-function open_database_connection()
+function open_Database_Connection()
 {
     $con = mysql_connect("192.168.121.130","jason","MA6LzTwehLUvdPBZ");
     return $con;
 }
-function get_all_message()
+
+function get_All_Message()
 {
-    $con = open_database_connection();
+    $con = open_Database_Connection();
     $result = $con->query('SELECT * FROM message ORDER BY id desc');
     for ($i = 1; $i <=mysql_num_rows($result); $i++) {
         $message = mysql_fetch_assoc($result);
-        close_database_connection($con);
         return $message;
     }
 }
-function delete_message($id)
+
+function delete_Message($id)
 {
-    $con = open_database_connection();
+    $con = open_Database_Connection();
     $result = $con->query("'DELETE FROM message WHERE id = '$id'");
     header("location:admin.php");
 }
