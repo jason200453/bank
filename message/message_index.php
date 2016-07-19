@@ -2,6 +2,7 @@
 // show_message.php
 require_once "bootstrap.php";
 require_once 'src/message2.php';
+
 $messages = $em->getRepository('Message2')->findAll();
 
 ?>
@@ -25,7 +26,7 @@ $messages = $em->getRepository('Message2')->findAll();
             <p>&nbsp;</p>
             <p>&nbsp;</p>
 <?php
-foreach($messages as $message) {    
+foreach($messages as $message) {
 
 ?>
         <div>
