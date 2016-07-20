@@ -1,5 +1,5 @@
 <?php
-require_once "bootstrap.php";
+require_once 'bootstrap.php';
 require_once 'src/message2.php';
 $message2 = new Message2();
 if (isset(

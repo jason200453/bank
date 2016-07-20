@@ -1,5 +1,5 @@
 <?php
-require_once "bootstrap.php";
+require_once 'bootstrap.php';
 require_once 'src/message2.php';
 
 $messages = $em->getRepository('Message2')->findAll();

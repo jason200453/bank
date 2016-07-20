@@ -1,5 +1,5 @@
 <?php
-require_once "bootstrap.php";
+require_once 'bootstrap.php';
 require_once 'src/message2.php';
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
