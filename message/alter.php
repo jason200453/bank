@@ -9,13 +9,14 @@ $row = [
     'email' => $query->getEmail(),
     'name' => $query->getName(),
     'title' => $query->getTitle(),
-    'content' => $query->getContent()
+    'content' => $query->getContent(),
+    'reply' =>$query->getReply()
 ]
 
 ?>
 <html>
     <head>
-        <title>我要留言</title>
+        <title>管理留言</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     </head>
     <body>
@@ -27,9 +28,11 @@ $row = [
             <input type="text" name="writename" id="writename" value="<?php echo $row['name']?>"/><br>
             <label>E-mail:</label>
             <input type="text" name="writeemail" id="writeemail" value="<?php echo $row['email']?>"/><br>
-            <label>內容:</label>
-            <input type="text"  name="writecontent" id="writecontent" rows="5" value="<?php echo $row['content']?>"/><br>
-            <input type="submit" name="button" id="button" value="確認修改"/>
+            <label>留言內容:</label>
+            <input type="text"  name="writecontent" id="writecontent" rows="10" value="<?php echo $row['content']?>"/><br>
+            <label>回覆內容:</label>
+            <input type="text"  name="writereply" id="writereply" rows="10" value="<?php echo $row['reply']?>"/><br>
+            <input type="submit" name="button" id="button" value="確認修改&回覆"/>
             <a href="admin.php"><button type="button">不修改了</button></a>
         </form>
     </body>

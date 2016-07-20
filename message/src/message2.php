@@ -1,5 +1,4 @@
 <?php
-// src/message2.php
 use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
@@ -11,12 +10,14 @@ class Message2
     protected $id = null;
     /** @ORM\Column(type="string", name="name", length=20, nullable=FALSE) **/
     protected $name = null;
-     /** @ORM\Column(type="string", name="title", length=50, nullable=FALSE) **/
+    /** @ORM\Column(type="string", name="title", length=50, nullable=FALSE) **/
     protected $title = null;
-      /** @ORM\Column(type="string", name="email", length=40, nullable=FALSE) **/
+    /** @ORM\Column(type="string", name="email", length=40, nullable=FALSE) **/
     protected $email = null;
-      /** @ORM\Column(type="string", name="content", length=100, nullable=FALSE) **/
+    /** @ORM\Column(type="string", name="content", length=100, nullable=FALSE) **/
     protected $content = null;
+    /** @ORM\Column(type="string", name="reply", length=100,  nullable=TRUE) **/
+    protected $reply = null;
 
     public function getId()
     {
@@ -42,6 +43,11 @@ class Message2
     {
         return $this->content;
     }
+    
+    public function getReply()
+    {
+        return$this->reply;
+    }
 
     public function setId($id)
     {
@@ -66,5 +72,10 @@ class Message2
     public function setContent($content)
     {
         $this->content = $content;
+    }
+    
+    public function setReply($reply)
+    {
+        $this->reply = $reply;
     }
 }

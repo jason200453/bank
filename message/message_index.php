@@ -1,5 +1,4 @@
 <?php
-// show_message.php
 require_once 'bootstrap.php';
 require_once 'src/message2.php';
 
@@ -45,6 +44,11 @@ foreach($messages as $message) {
                 <tr>
                     <td>留言內容</td>
                     <td><?php echo $message->getContent()?></td>
+                </tr>
+                <HR>
+                <tr>
+                    <td>回覆</td>
+                    <td><?php echo $message->getReply()?></td>
                 </tr>
             </table>
         </div>
