@@ -1,7 +1,7 @@
 <?php
 require_once 'bootstrap.php';
 require_once 'src/message2.php';
-
+require_once 'src/reply.php';
 $messages = $em->getRepository('Message2')->findAll();
 
 ?>
@@ -41,14 +41,10 @@ foreach($messages as $message) {
                 <tr>
                     <td>留言內容</td>
                     <td><?php echo $message->getContent()?></td>
-                </tr>
-                <tr>
-                    <td>回覆內容</td>
-                    <td><?php echo $message->getReply()?></td>                    
-                </tr>
+                </tr>               
                 <tr>
                     <td><a href="do_delete.php?id=<?php echo $message->getId()?>"> 刪除</a></td>
-                    <td><a href="alter.php?id=<?php echo $message->getId()?>"> 修改&回覆</a></td>
+                    <td><a href="alter.php?id=<?php echo $message->getId()?>"> 修改</a></td>
                 </tr>
             </table>
         </div>

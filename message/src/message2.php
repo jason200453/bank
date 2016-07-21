@@ -1,5 +1,7 @@
 <?php
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+require_once 'src/reply.php';
 /**
  * @ORM\Entity()
  * @ORM\Table(name="message2")
@@ -16,9 +18,22 @@ class Message2
     protected $email = null;
     /** @ORM\Column(type="string", name="content", length=100, nullable=FALSE) **/
     protected $content = null;
-    /** @ORM\Column(type="string", name="reply", length=100,  nullable=TRUE) **/
-    protected $reply = null;
-
+    /**
+         * @ORM\OneToMany(targetEntity="Reply", mappedBy="message")
+          * @var Reply[]
+         **/        
+    protected $replyMessage = null;
+    
+    public function addReplyMessage($reply)
+    {
+        $this->replyMessage[] = $reply;
+    }
+        
+    public function __construct()
+    {
+        $this->replyMessage = new ArrayCollection();
+    }
+    
     public function getId()
     {
         return $this->id;
@@ -43,15 +58,10 @@ class Message2
     {
         return $this->content;
     }
-    
-    public function getReply()
-    {
-        return$this->reply;
-    }
 
     public function setId($id)
     {
-        $ths->id = $id;
+        $this->id = $id;
     }
 
     public function setName($name)
@@ -72,10 +82,5 @@ class Message2
     public function setContent($content)
     {
         $this->content = $content;
-    }
-    
-    public function setReply($reply)
-    {
-        $this->reply = $reply;
     }
 }
