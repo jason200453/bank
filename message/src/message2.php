@@ -19,14 +19,14 @@ class Message2
     protected $content = null;
     /**
          * @ORM\OneToMany(targetEntity="Reply", mappedBy="message")
-         **/        
+         **/
     protected $replyMessage = null;
 
     public function __construct()
     {
         $this->replyMessage = new ArrayCollection();
     }
-    
+
     public function getId()
     {
         return $this->id;

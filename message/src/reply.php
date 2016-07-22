@@ -14,7 +14,7 @@ class Reply
     protected $reply = null;
     /**
          * @ORM\ManyToOne(targetEntity="Message2", inversedBy="replyMessage")
-         * @ORM\JoinColumn(name="message_id", referencedColumnName="id", onDelete="CASCADE") 
+         * @ORM\JoinColumn(name="message_id", referencedColumnName="id", onDelete="CASCADE")
          */
     protected $message;
 
@@ -27,12 +27,12 @@ class Reply
     {
         return $this->name;
     }
-    
+
     public function getReply()
     {
         return$this->reply;
     }
-    
+
     public function getMessage()
     {
         return$this->message;
@@ -47,12 +47,12 @@ class Reply
     {
         $this->name = $name;
     }
-    
+
     public function setReply($reply)
     {
         $this->reply = $reply;
     }
-    
+
     public function setMessage($message)
     {
         $this->message = $message;

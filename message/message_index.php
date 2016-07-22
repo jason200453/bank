@@ -57,7 +57,7 @@ foreach($messages as $message) {
                     foreach($querys as $reply) {
                         echo $reply->getName().":".$reply->getReply()."\n";
                     }
-                    
+
                     ?>
                     </td>
                 </tr>
