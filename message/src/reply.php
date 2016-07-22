@@ -1,6 +1,5 @@
 <?php
 use Doctrine\ORM\Mapping as ORM;
-require_once 'src/message2.php';
 /**
  * @ORM\Entity()
  * @ORM\Table(name="reply")
@@ -15,6 +14,7 @@ class Reply
     protected $reply = null;
     /**
          * @ORM\ManyToOne(targetEntity="Message2", inversedBy="replyMessage")
+         * @ORM\JoinColumn(name="message_id", referencedColumnName="id", onDelete="CASCADE") 
          */
     protected $message;
 
@@ -55,7 +55,6 @@ class Reply
     
     public function setMessage($message)
     {
-        //$message->addReplyMessage($this);
         $this->message = $message;
     }
 }

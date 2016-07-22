@@ -5,7 +5,6 @@ require_once 'src/reply.php';
 
 $messages = $em->getRepository('Message2')->findAll();
 
-
 ?>
 <html>
     <head>
@@ -50,9 +49,17 @@ foreach($messages as $message) {
                 </tr>
                 <tr>
                     <td>回覆內容</td>
-                    <td><?php $id = $message->getId();
+                    <td>
+                    <?php
+                    $id = $message->getId();
                     $query = $em->createQuery("SELECT r FROM Reply r JOIN r.message m WHERE m.id = '$id'");
-                    $querys = $query->getResult(); foreach($querys as $reply) {echo $reply->getReply()."\n";}?></td>
+                    $querys = $query->getResult();
+                    foreach($querys as $reply) {
+                        echo $reply->getName().":".$reply->getReply()."\n";
+                    }
+                    
+                    ?>
+                    </td>
                 </tr>
                 <HR>
             </table>

@@ -1,7 +1,6 @@
 <?php
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-require_once 'src/reply.php';
 /**
  * @ORM\Entity()
  * @ORM\Table(name="message2")
@@ -20,15 +19,9 @@ class Message2
     protected $content = null;
     /**
          * @ORM\OneToMany(targetEntity="Reply", mappedBy="message")
-          * @var Reply[]
          **/        
     protected $replyMessage = null;
-    
-    public function addReplyMessage($reply)
-    {
-        $this->replyMessage[] = $reply;
-    }
-        
+
     public function __construct()
     {
         $this->replyMessage = new ArrayCollection();
