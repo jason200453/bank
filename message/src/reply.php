@@ -12,10 +12,10 @@ class Reply
          *  @ORM\GeneratedValue
          */
     protected $id = null;
-    
+
     /** @ORM\Column(type="string", name="name", length=20, nullable=FALSE) */
     protected $name = null;
-    
+
     /** @ORM\Column(type="string", name="reply", length=100,  nullable=FALSE) */
     protected $reply = null;
 
