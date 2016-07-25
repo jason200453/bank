@@ -52,8 +52,14 @@ foreach($messages as $message) {
                     <td>
                     <?php
                     $id = $message->getId();
-                    $query = $em->createQuery("SELECT r FROM Reply r JOIN r.message m WHERE m.id = '$id'");
-                    $querys = $query->getResult();
+                    $qb = $em->createQueryBuilder();
+                    $qb ->select('r')
+                        ->from('Reply', 'r')
+                        ->join('r.message', 'm')
+                        ->where($qb->expr()->eq('m.id', "'$id'"));
+                    $querys = $qb->getQuery()->getResult();
+                    //$query = $em->createQuery("SELECT r FROM Reply r JOIN r.message m WHERE m.id = '$id'");
+                    //$querys = $query->getResult();
                     foreach($querys as $reply) {
                         echo $reply->getName().":".$reply->getReply()."\n";
                     }
