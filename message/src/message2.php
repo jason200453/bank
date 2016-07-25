@@ -7,19 +7,26 @@ use Doctrine\Common\Collections\ArrayCollection;
  **/
 class Message2
 {
-    /** @ORM\Id @ORM\Column(type="integer") @ORM\GeneratedValue **/
-    protected $id = null;
-    /** @ORM\Column(type="string", name="name", length=20, nullable=FALSE) **/
-    protected $name = null;
-    /** @ORM\Column(type="string", name="title", length=50, nullable=FALSE) **/
-    protected $title = null;
-    /** @ORM\Column(type="string", name="email", length=40, nullable=FALSE) **/
-    protected $email = null;
-    /** @ORM\Column(type="string", name="content", length=100, nullable=FALSE) **/
-    protected $content = null;
     /**
-         * @ORM\OneToMany(targetEntity="Reply", mappedBy="message")
-         **/
+         *  @ORM\Id
+         * @ORM\Column(type="integer")
+         *  @ORM\GeneratedValue
+         */
+    protected $id = null;
+
+    /** @ORM\Column(type="string", name="name", length=20, nullable=FALSE) */
+    protected $name = null;
+
+    /** @ORM\Column(type="string", name="title", length=50, nullable=FALSE) */
+    protected $title = null;
+
+    /** @ORM\Column(type="string", name="email", length=40, nullable=FALSE) */
+    protected $email = null;
+
+    /** @ORM\Column(type="string", name="content", length=100, nullable=FALSE) */
+    protected $content = null;
+
+    /** @ORM\OneToMany(targetEntity="Reply", mappedBy="message")*/
     protected $replyMessage = null;
 
     public function __construct()

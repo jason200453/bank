@@ -3,15 +3,22 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  * @ORM\Table(name="reply")
- **/
+ */
 class Reply
 {
-    /** @ORM\Id @ORM\Column(type="integer") @ORM\GeneratedValue **/
+    /**
+         * @ORM\Id
+         * @ORM\Column(type="integer")
+         *  @ORM\GeneratedValue
+         */
     protected $id = null;
-    /** @ORM\Column(type="string", name="name", length=20, nullable=FALSE) **/
+    
+    /** @ORM\Column(type="string", name="name", length=20, nullable=FALSE) */
     protected $name = null;
-    /** @ORM\Column(type="string", name="reply", length=100,  nullable=FALSE) **/
+    
+    /** @ORM\Column(type="string", name="reply", length=100,  nullable=FALSE) */
     protected $reply = null;
+
     /**
          * @ORM\ManyToOne(targetEntity="Message2", inversedBy="replyMessage")
          * @ORM\JoinColumn(name="message_id", referencedColumnName="id", onDelete="CASCADE")
