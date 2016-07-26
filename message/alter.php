@@ -6,13 +6,17 @@ require_once 'src/reply.php';
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 }
-$query = $em->getRepository('Message2')->find($id);
-$row = [
-    'email' => $query->getEmail(),
-    'name' => $query->getName(),
-    'title' => $query->getTitle(),
-    'content' => $query->getContent(),
-]
+$qb = $em->createQueryBuilder();
+$qb ->select('m')
+    ->from('message2', 'm')
+    ->where($qb->expr()->eq('m.id', "'$id'"));
+$querys = $qb->getQuery()->getResult();
+foreach($querys as $query) {
+    $email = $query->getEmail();
+    $name = $query->getName();
+    $title = $query->getTitle();
+    $content = $query->getContent();
+}
 
 ?>
 <html>
@@ -24,13 +28,13 @@ $row = [
         <form id="form" name="form" method="post" action="do_alter.php">
             <input type="hidden" name="writeid" id="writeid" value="<?php echo $id?>" readonly/><br>
             <label>標題:</label>
-            <input type="text" name="writetitle" id="writetitle" value="<?php echo $row['title']?>"/><br>
+            <input type="text" name="writetitle" id="writetitle" value="<?php echo $title?>"/><br>
             <label>暱稱:</label>
-            <input type="text" name="writename" id="writename" value="<?php echo $row['name']?>"/><br>
+            <input type="text" name="writename" id="writename" value="<?php echo $name?>"/><br>
             <label>E-mail:</label>
-            <input type="text" name="writeemail" id="writeemail" value="<?php echo $row['email']?>"/><br>
+            <input type="text" name="writeemail" id="writeemail" value="<?php echo $email?>"/><br>
             <label>留言內容:</label>
-            <input type="text"  name="writecontent" id="writecontent" rows="10" value="<?php echo $row['content']?>"/><br>
+            <input type="text"  name="writecontent" id="writecontent" rows="10" value="<?php echo $content?>"/><br>
             <input type="submit" name="button" id="button" value="確認修改&回覆"/>
             <a href="admin.php"><button type="button">不修改了</button></a>
         </form>

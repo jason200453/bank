@@ -2,8 +2,10 @@
 require_once 'bootstrap.php';
 require_once 'src/message2.php';
 require_once 'src/reply.php';
-
-$messages = $em->getRepository('Message2')->findAll();
+$qbm = $em->createQueryBuilder();
+$qbm ->select('m')
+     ->from('message2', 'm');
+$messages = $qbm->getQuery()->getResult();
 
 ?>
 <html>
@@ -58,8 +60,6 @@ foreach($messages as $message) {
                         ->join('r.message', 'm')
                         ->where($qb->expr()->eq('m.id', "'$id'"));
                     $querys = $qb->getQuery()->getResult();
-                    //$query = $em->createQuery("SELECT r FROM Reply r JOIN r.message m WHERE m.id = '$id'");
-                    //$querys = $query->getResult();
                     foreach($querys as $reply) {
                         echo $reply->getName().":".$reply->getReply()."\n";
                     }
