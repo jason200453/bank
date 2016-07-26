@@ -2,10 +2,8 @@
 require_once 'bootstrap.php';
 require_once 'src/message2.php';
 require_once 'src/reply.php';
-$qbm = $em->createQueryBuilder();
-$qbm ->select('m')
-     ->from('message2', 'm');
-$messages = $qbm->getQuery()->getResult();
+$query = $em->createQuery("SELECT m FROM message2 m");
+$messages = $query->getResult();
 
 ?>
 <html>

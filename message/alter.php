@@ -6,11 +6,8 @@ require_once 'src/reply.php';
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 }
-$qb = $em->createQueryBuilder();
-$qb ->select('m')
-    ->from('message2', 'm')
-    ->where($qb->expr()->eq('m.id', "'$id'"));
-$querys = $qb->getQuery()->getResult();
+$query = $em->createQuery("SELECT m FROM message2 m WHERE m.id = '$id'");
+$querys = $query->getResult();
 foreach($querys as $query) {
     $email = $query->getEmail();
     $name = $query->getName();

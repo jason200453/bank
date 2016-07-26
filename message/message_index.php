@@ -2,10 +2,8 @@
 require_once 'bootstrap.php';
 require_once 'src/message2.php';
 require_once 'src/reply.php';
-$qbm = $em->createQueryBuilder();
-$qbm ->select('m')
-     ->from('message2', 'm');
-$messages = $qbm->getQuery()->getResult();
+$query = $em->createQuery("SELECT m FROM message2 m");
+$messages = $query->getResult();
 
 ?>
 <html>
@@ -54,12 +52,8 @@ foreach($messages as $message) {
                     <td>
                     <?php
                     $id = $message->getId();
-                    $qb = $em->createQueryBuilder();
-                    $qb ->select('r')
-                        ->from('Reply', 'r')
-                        ->join('r.message', 'm')
-                        ->where($qb->expr()->eq('m.id', "'$id'"));
-                    $querys = $qb->getQuery()->getResult();
+                    $queryReply = $em->createQuery("SELECT r FROM reply r JOIN r.message m WHERE m.id = '$id'");
+                    $querys = $queryReply->getResult();
                     foreach($querys as $reply) {
                         echo $reply->getName().":".$reply->getReply()."\n";
                     }
