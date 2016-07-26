@@ -2,7 +2,7 @@
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 
-require_once "/home/parson_chen/parson_chen/message/autoload.php";
+require_once '/home/parson_chen/parson_chen/message/autoload.php';
 
 $isDevMode = false;
 $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__."/src"), $isDevMode, null, null, false);
