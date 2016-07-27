@@ -57,7 +57,7 @@ if (isset(
                 }
             }
         }
-        header("location:message_index.php");        
+        header("location:message_index.php");
     } else {
         header("location:write_message.php");
     }
