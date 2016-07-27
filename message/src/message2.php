@@ -14,20 +14,17 @@ class Message2
          */
     protected $id = null;
 
-    /** @ORM\Column(type="string", name="name", length=20, nullable=FALSE) */
-    protected $name = null;
-
     /** @ORM\Column(type="string", name="title", length=50, nullable=FALSE) */
     protected $title = null;
-
-    /** @ORM\Column(type="string", name="email", length=40, nullable=FALSE) */
-    protected $email = null;
 
     /** @ORM\Column(type="string", name="content", length=100, nullable=FALSE) */
     protected $content = null;
 
     /** @ORM\OneToMany(targetEntity="Reply", mappedBy="message")*/
     protected $replyMessage = null;
+
+    /** @ORM\ManyToOne(targetEntity="Messager", inversedBy="message")*/
+    protected $messager = null;
 
     public function __construct()
     {
@@ -39,19 +36,9 @@ class Message2
         return $this->id;
     }
 
-    public function getName()
-    {
-        return $this->name;
-    }
-
     public function getTitle()
     {
         return $this->title;
-    }
-
-    public function getEmail()
-    {
-        return $this->email;
     }
 
     public function getContent()
@@ -59,14 +46,14 @@ class Message2
         return $this->content;
     }
 
+    public function getMessager()
+    {
+        return $this->messager;
+    }
+
     public function setId($id)
     {
         $this->id = $id;
-    }
-
-    public function setName($name)
-    {
-        $this->name = $name;
     }
 
     public function setTitle($title)
@@ -74,13 +61,13 @@ class Message2
         $this->title = $title;
     }
 
-    public function setEmail($email)
-    {
-        $this->email = $email;
-    }
-
     public function setContent($content)
     {
         $this->content = $content;
+    }
+    
+    public function setMessager($messager)
+    {
+        $this->content = $messager;
     }
 }
