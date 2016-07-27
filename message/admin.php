@@ -2,8 +2,12 @@
 require_once 'bootstrap.php';
 require_once 'src/message2.php';
 require_once 'src/reply.php';
-$query = $em->createQuery("SELECT m FROM message2 m");
-$messages = $query->getResult();
+require_once 'src/messager.php';
+$qbm = $em->createQueryBuilder();
+$qbm->select('m', 'e')
+    ->from('message2', 'm')
+    ->join('m.messager', 'e');
+$messages = $qbm->getQuery()->getResult();
 
 ?>
 <html>
@@ -33,11 +37,11 @@ foreach($messages as $message) {
                 </tr>
                 <tr>
                     <td width="25%">暱稱</td>
-                    <td width="75%"><?php echo $message->getName()?></td>
+                    <td width="75%"><?php echo $message->getMessager()->getName()?></td>
                 </tr>
                 <tr>
                     <td>信箱</td>
-                    <td><?php echo $message->getEmail()?></td>
+                    <td><?php echo $message->getMessager()->getEmail()?></td>
                 </tr>
                 <tr>
                     <td>留言內容</td>

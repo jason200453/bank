@@ -2,8 +2,13 @@
 require_once 'bootstrap.php';
 require_once 'src/message2.php';
 require_once 'src/reply.php';
-$query = $em->createQuery("SELECT m FROM message2 m");
-$messages = $query->getResult();
+require_once 'src/messager.php';
+
+$qbm = $em->createQueryBuilder();
+$qbm->select('m', 'e')
+    ->from('message2', 'm')
+    ->join('m.messager', 'e');
+$messages = $qbm->getQuery()->getResult();
 
 ?>
 <html>
@@ -37,11 +42,11 @@ foreach($messages as $message) {
                 </tr>
                 <tr>
                     <td width="25%">暱稱</td>
-                    <td width="75%"><?php echo $message->getName()?></td>
+                    <td width="75%"><?php echo $message->getMessager()->getName()?></td>
                 </tr>
                 <tr>
                     <td>信箱</td>
-                    <td><?php echo $message->getEmail()?></td>
+                    <td><?php echo $message->getMessager()->getEmail()?></td>
                 </tr>
                 <tr>
                     <td>留言內容</td>
@@ -52,10 +57,15 @@ foreach($messages as $message) {
                     <td>
                     <?php
                     $id = $message->getId();
-                    $queryReply = $em->createQuery("SELECT r FROM reply r JOIN r.message m WHERE m.id = '$id'");
-                    $querys = $queryReply->getResult();
+                    $queryReply = $em->createQueryBuilder();
+                    $queryReply->select('m', 'e', 'r')
+                               ->from('reply', 'r')
+                               ->join('r.message', 'm')
+                               ->join('r.messager', 'e')
+                               ->where($queryReply->expr()->eq('m.id', "'$id'"));
+                    $querys = $queryReply->getQuery()->getResult();
                     foreach($querys as $reply) {
-                        echo $reply->getName().":".$reply->getReply()."\n";
+                        echo $reply->getMessager()->getName().":".$reply->getReply()."\n";
                     }
 
                     ?>

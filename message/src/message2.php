@@ -68,6 +68,6 @@ class Message2
     
     public function setMessager($messager)
     {
-        $this->content = $messager;
+        $this->messager = $messager;
     }
 }

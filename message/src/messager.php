@@ -76,6 +76,6 @@ class Messager
 
     public function setEmail($email)
     {
-        $this->message = $email;
+        $this->email = $email;
     }
 }

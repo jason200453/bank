@@ -13,6 +13,8 @@
             <input type="text" name="writeemail" id="writeemail"><br>
             <label>內容:</label>
             <input type="text"  name="writecontent" id="writecontent"/><br>
+            <label>電話:</label>
+            <input type="text"  name="writephone" id="writephone"/><br>
             <input type="submit" name="button" id="button" value="送出"/>
             <a href="message_index.php"><button type="button">不留言了</button></a>
         </form>
