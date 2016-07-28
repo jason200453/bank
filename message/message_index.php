@@ -65,7 +65,8 @@ foreach($messages as $message) {
                                ->from('reply', 'r')
                                ->join('r.message', 'm')
                                ->join('r.messager', 'e')
-                               ->where($queryReply->expr()->eq('m.id', "'$id'"));
+                               ->where('m.id = :id')
+                               ->setParameter('id', $id);
                     $querys = $queryReply->getQuery()->getResult();
                     foreach($querys as $reply) {
                         echo $reply->getMessager()->getName().":".$reply->getReply()."\n";

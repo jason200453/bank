@@ -11,7 +11,8 @@ $qb = $em->createQueryBuilder();
 $qb->select('m', 'e')
     ->from('message2', 'm')
     ->join('m.messager', 'e')
-    ->where("m.id = '$id'");
+    ->where('m.id = :id')
+    ->setParameter('id', $id);
 $querys = $qb->getQuery()->getResult();
 foreach($querys as $query) {
     $title = $query->getTitle();

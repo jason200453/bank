@@ -9,6 +9,7 @@ if (isset($_GET['id'])) {
 }
 $qb = $em->createQueryBuilder();
 $qb ->delete('message2', 'm')
-    ->where($qb->expr()->eq('m.id', "'$id'"));
+    ->where('m.id = :id')
+    ->setParameter('id', $id);
 $qb->getQuery()->getResult();
 header("location:admin.php");

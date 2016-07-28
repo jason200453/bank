@@ -13,7 +13,9 @@ if (isset(
     $qbMessagerId = $em->createQueryBuilder();
     $qbMessagerId->select('e')
                  ->from('messager', 'e')
-                 ->where("e.email = '$email' AND e.phone = '$phone'");
+                 ->where('e.email = :email AND e.phone = :phone')
+                 ->setParameter('email', $email)
+                 ->setParameter('phone', $phone);
     $messagerIds =$qbMessagerId->getQuery()->getResult();
     foreach($messagerIds as $messagerID) {
         $id = $messagerID->getId();
@@ -22,7 +24,8 @@ if (isset(
     $qbAll->select('m', 'e')
           ->from('message2', 'm')
           ->join('m.messager', 'e')
-          ->where("m.messager = '$id'");
+          ->where('m.messager = :id')
+          ->setParameter('id', $id);
     $messages = $qbAll->getQuery()->getResult();
 }
 

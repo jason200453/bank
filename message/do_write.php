@@ -44,7 +44,8 @@ if (isset(
                 $qb1 = $em->createQueryBuilder();
                 $qb1->select('e')
                     ->from('messager', 'e')
-                    ->where($qb1->expr()->eq('e.name', "'$name'"));
+                    ->where('e.name = :name')
+                    ->setParameter('name', $name);
                 $qb1Outs = $qb1->getQuery()->getResult();
                 foreach($qb1Outs as $qb1Out) {
                     $message2->setTitle($title);

@@ -15,8 +15,11 @@ if (isset(
 }
 $qb = $em->createQueryBuilder();
 $qb ->update('message2', 'm')
-    ->set('m.title', $qb->expr()->literal($title))
-    ->set('m.content', $qb->expr()->literal($content))
-    ->where($qb->expr()->eq('m.id', "'$id'"));
+    ->set('m.title', ':title')
+    ->set('m.content', ':content')
+    ->where('m.id = :id')
+    ->setParameter('id', $id)
+    ->setParameter('title', $title)
+    ->setParameter('content', $content);
 $qb->getQuery()->getResult();
 header("location:admin.php");
