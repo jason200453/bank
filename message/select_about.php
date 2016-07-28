@@ -20,6 +20,10 @@ if (isset(
     foreach($messagerIds as $messagerID) {
         $id = $messagerID->getId();
     }
+    if (empty($id)) {
+        echo "<script>alert('You are not messager!!')</script>";
+        echo "<script>window.location.href = 'message_index.php'</script>";  
+    }
     $qbAll = $em->createQueryBuilder();
     $qbAll->select('m', 'e')
           ->from('message2', 'm')
@@ -27,6 +31,10 @@ if (isset(
           ->where('m.messager = :id')
           ->setParameter('id', $id);
     $messages = $qbAll->getQuery()->getResult();
+    if (empty($messages)) {
+        echo "<script>alert('Does not have message!!')</script>";
+        echo "<script>window.location.href = 'message_index.php'</script>"; 
+    }
 }
 
 ?>
