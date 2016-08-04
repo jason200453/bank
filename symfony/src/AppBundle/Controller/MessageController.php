@@ -23,7 +23,7 @@ class MessageController extends Controller
             ->from('AppBundle:Message2', 'm')
             ->join('m.messager', 'e');
         $messages = $queryBuilderMessage->getQuery()->getResult();
-   
+
         $queryReply = $em->createquery("SELECT r, m, e FROM AppBundle:Reply r JOIN r.message m JOIN r.messager e");
         $querys = $queryReply->getResult();
 
@@ -38,17 +38,17 @@ class MessageController extends Controller
     public function checkMessagerAction(Request $request)
     {
         $messager = new Messager();
-        
-        $form = $this->createFormBuilder($messager)      
+
+        $form = $this->createFormBuilder($messager)
             ->add('name', 'text')
             ->add('email', 'text')
             ->add('phone', 'text')
             ->add('leave', 'submit', array('label' => 'I want leave message'))
             ->add('reply', 'submit', array('label' => 'I want reply'))
             ->getForm();
-        
+
         $form->handleRequest($request);
-        
+
         if ($form->get('leave')->isClicked() && $form->isValid()) {
             $messager = $form->getData();
             $em = $this->getDoctrine()->getManager();
@@ -109,7 +109,7 @@ class MessageController extends Controller
         $messager_id = $request->query->get('messager_id');
         $messagerId = $em->find("AppBundle:Messager", $messager_id);
 
-        $form = $this->createFormBuilder($message)          
+        $form = $this->createFormBuilder($message)
             ->add('title', 'text')
             ->add('content', 'text')
             ->add('save', 'submit', array('label' => 'Leave Message'))
@@ -176,7 +176,7 @@ class MessageController extends Controller
             ->getForm();
 
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $messageForm = $form->getData();
             $queryBuilderUpdate = $em->createQueryBuilder();
@@ -188,13 +188,13 @@ class MessageController extends Controller
                       ->setParameter('title', $messageForm->getTitle())
                       ->setParameter('content', $messageForm->getContent());
             $queryBuilderUpdate->getQuery()->getResult();
-            
+
             return $this->redirectToRoute('index');
         }
- 
+
         return $this->render('message/alter.html.php', array(
         'form' => $form->createView()
-        ));   
+        ));
     }
 
     /**
