@@ -11,9 +11,6 @@
             <ul>
                 <a href="<?php echo $view['router']->path('check')?>"><button type="button">我要留言</button></a>
             </ul>
-            <ul>
-                <a href="about.php"><button type="button">查看關於我的留言</button></a>
-            </ul>
         </div>
             <p>&nbsp;</p>
             <p>&nbsp;</p>
