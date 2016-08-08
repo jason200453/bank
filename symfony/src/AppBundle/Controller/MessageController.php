@@ -1,20 +1,15 @@
 <?php
 namespace AppBundle\Controller;
 
-use AppBundle\Entity;
 use AppBundle\Entity\Reply;
 use AppBundle\Entity\Message2;
 use AppBundle\Entity\Messager;
 use AppBundle\Form;
-use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-
 class MessageController extends Controller
 {
-
     /**
             * @Route("/message", name="index")
             */
@@ -22,12 +17,9 @@ class MessageController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $messages = $em->getRepository('AppBundle:Message2')->selectAllMessage();
-
         $querys = $em->getRepository('AppBundle:Reply')->selectAllReply();
 
-        return $this->render('message/message.html.php', array(
-        'messages' => $messages, 'querys' => $querys
-        ));
+        return $this->render('message/message.html.php', array('messages' => $messages, 'querys' => $querys));
     }
 
     /**
@@ -43,14 +35,10 @@ class MessageController extends Controller
         if ($form->get('leave')->isClicked() && $form->isValid()) {
             $messager = $form->getData();
             $em = $this->getDoctrine()->getManager();
-            $queryBuilderCheck = $em->createQueryBuilder();
-            $queryBuilderCheck->select('e')
-               ->from('AppBundle:Messager', 'e')
-               ->where('e.name = :checkname AND e.email = :checkemail AND e.phone = :checkphone')
-               ->setParameter('checkname', $messager->getName())
-               ->setParameter('checkemail', $messager->getEmail())
-               ->setParameter('checkphone', $messager->getPhone());
-            $checkMessagersQuery = $queryBuilderCheck->getQuery()->getResult();
+
+            $checkMessagersQuery = $em->getRepository('AppBundle:Messager')
+                ->checkMessager($messager->getName(), $messager->getEmail(), $messager->getPhone());
+
             if (!$checkMessagersQuery) {
                 $em->persist($messager);
                 $em->flush();
@@ -69,14 +57,10 @@ class MessageController extends Controller
             $id = $request->query->get('id');
             $messager = $form->getData();
             $em = $this->getDoctrine()->getManager();
-            $queryBuilderCheck = $em->createQueryBuilder();
-            $queryBuilderCheck->select('e')
-                              ->from('AppBundle:Messager', 'e')
-                              ->where('e.name = :checkname AND e.email = :checkemail AND e.phone = :checkphone')
-                              ->setParameter('checkname', $messager->getName())
-                              ->setParameter('checkemail', $messager->getEmail())
-                              ->setParameter('checkphone', $messager->getPhone());
-            $checkMessagersQuery = $queryBuilderCheck->getQuery()->getResult();
+
+             $checkMessagersQuery = $em->getRepository('AppBundle:Messager')
+                ->checkMessager($messager->getName(), $messager->getEmail(), $messager->getPhone());
+
             if (!$checkMessagersQuery) {
                 $em->persist($messager);
                 $em->flush();
@@ -88,9 +72,7 @@ class MessageController extends Controller
                 return $this->redirectToRoute('reply', array('messager_id' => $messagerQueryId, 'message_id' => $id));
             }
         }
-        return $this->render('message/check_messager.html.php', array(
-        'form' => $form->createView()
-        ));
+        return $this->render('message/check_messager.html.php', array('form' => $form->createView()));
     }
 
     /**
@@ -115,9 +97,7 @@ class MessageController extends Controller
             $em->flush();
             return $this->redirectToRoute('index');
         }
-        return $this->render('message/write_message.html.php', array(
-        'form' => $form->createView()
-        ));
+        return $this->render('message/write_message.html.php', array('form' => $form->createView()));
     }
 
     /**
@@ -127,11 +107,7 @@ class MessageController extends Controller
     {
         $id = $request->query->get('id');
         $em = $this->getDoctrine()->getManager();
-        $queryBuilderDelete = $em->createQueryBuilder();
-        $queryBuilderDelete ->delete('AppBundle:Message2', 'm')
-            ->where('m.id = :id')
-            ->setParameter('id', $id);
-        $queryBuilderDelete->getQuery()->getResult();
+        $em->getRepository('AppBundle:Message2')->deleteMessage($id);
 
         return $this->redirectToRoute('index');
     }
@@ -143,13 +119,8 @@ class MessageController extends Controller
     {
         $id = $request->query->get('id');
         $em = $this->getDoctrine()->getManager();
-        $queryBuilderMessage = $em->createQueryBuilder();
-        $queryBuilderMessage->select('m', 'e')
-           ->from('AppBundle:Message2', 'm')
-           ->join('m.messager', 'e')
-           ->where('m.id = :id')
-           ->setParameter('id', $id);
-        $querys = $queryBuilderMessage->getQuery()->getResult();
+
+        $querys = $em->getRepository('AppBundle:Message2')->selectMessage($id);
         foreach($querys as $query) {
             $title = $query->getTitle();
             $content = $query->getContent();
@@ -165,22 +136,12 @@ class MessageController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $messageForm = $form->getData();
-            $queryBuilderUpdate = $em->createQueryBuilder();
-            $queryBuilderUpdate ->update('AppBundle:Message2', 'm')
-                      ->set('m.title', ':title')
-                      ->set('m.content', ':content')
-                      ->where('m.id = :id')
-                      ->setParameter('id', $id)
-                      ->setParameter('title', $messageForm->getTitle())
-                      ->setParameter('content', $messageForm->getContent());
-            $queryBuilderUpdate->getQuery()->getResult();
+            $em->getRepository('AppBundle:Message2')
+               ->alterMessage($id, $messageForm->getTitle(), $messageForm->getContent());
 
             return $this->redirectToRoute('index');
         }
-
-        return $this->render('message/alter.html.php', array(
-        'form' => $form->createView()
-        ));
+        return $this->render('message/alter.html.php', array('form' => $form->createView()));
     }
 
     /**
@@ -208,8 +169,6 @@ class MessageController extends Controller
             $em->flush();
             return $this->redirectToRoute('index');
         }
-        return $this->render('message/reply.html.php', array(
-        'form' => $form->createView()
-        ));
+        return $this->render('message/reply.html.php', array('form' => $form->createView()));
     }
 }

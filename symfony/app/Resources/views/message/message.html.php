@@ -43,8 +43,8 @@ foreach($messages as $message) {
                     <td>
                     <?php
                     foreach($querys as $reply) {
-                        if($reply->getMessage()->getId() == $message->getId()) {
-                        echo $reply->getMessager()->getName().":".$reply->getReply()."\n";
+                        if ($reply->getMessage()->getId() == $message->getId()) {
+                            echo $reply->getMessager()->getName().":".$reply->getReply()."\n";
                         }
                     }
 
