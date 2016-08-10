@@ -15,8 +15,8 @@ class Reply
             */
     protected $id = null;
 
-    /** 
-            * @ORM\Column(type="string", name="reply", length=100,  nullable=FALSE) 
+    /**
+            * @ORM\Column(type="string", name="reply", length=100,  nullable=FALSE)
             */
     protected $reply = null;
 
