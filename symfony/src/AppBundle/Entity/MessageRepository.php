@@ -15,7 +15,7 @@ class MessageRepository extends EntityRepository
             ->getQuery()
             ->getResult();
     }
-    
+
     public function deleteMessage($id)
     {
         return $this->getEntityManager()
@@ -26,7 +26,7 @@ class MessageRepository extends EntityRepository
             ->getQuery()
             ->getResult();
     }
-    
+
     public function selectMessage($id)
     {
         return $this->getEntityManager()
@@ -39,7 +39,7 @@ class MessageRepository extends EntityRepository
             ->getQuery()
             ->getResult();
     }
-    
+
     public function alterMessage($id, $title, $content)
     {
         return $this->getEntityManager()
