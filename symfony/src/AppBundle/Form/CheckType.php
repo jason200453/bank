@@ -11,7 +11,7 @@ class CheckType extends AbstractType
         $builder->add('name', 'text')
             ->add('email', 'text')
             ->add('phone', 'text')
-            ->add('leave', 'submit', array('label' => 'I want leave message'))
-            ->add('reply', 'submit', array('label' => 'I want reply'));   
+            ->add('leave', 'submit', ['label' => 'I want leave message'])
+            ->add('reply', 'submit', ['label' => 'I want reply message']);   
     }
 }
