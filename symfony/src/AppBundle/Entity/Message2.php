@@ -26,12 +26,12 @@ class Message2
             */
     protected $content = null;
 
-    /** 
+    /**
             * @ORM\OneToMany(targetEntity="Reply", mappedBy="message")
             */
     protected $replyMessage = null;
 
-    /** 
+    /**
             * @ORM\ManyToOne(targetEntity="Messager", inversedBy="message")
             */
     protected $messager = null;
@@ -107,7 +107,7 @@ class Message2
     /**
             * Get replyMessage
             *
-            * @return \Doctrine\Common\Collections\Collection 
+            * @return \Doctrine\Common\Collections\Collection
             */
     public function getReplyMessage()
     {
