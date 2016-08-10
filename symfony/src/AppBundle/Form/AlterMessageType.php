@@ -10,6 +10,6 @@ class AlterMessageType extends AbstractType
     {
         $builder->add('title', 'text')
             ->add('content', 'text')
-            ->add('save', 'submit', array('label' => 'Alter Message'));
+            ->add('save', 'submit', ['label' => 'Alter Message']);
     }
 }
