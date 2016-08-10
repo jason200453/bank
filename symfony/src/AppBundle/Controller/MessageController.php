@@ -19,7 +19,7 @@ class MessageController extends Controller
         $messages = $em->getRepository('AppBundle:Message2')->selectAllMessage();
         $querys = $em->getRepository('AppBundle:Reply')->selectAllReply();
 
-        return $this->render('message/message.html.php', array('messages' => $messages, 'querys' => $querys));
+        return $this->render('message/message.html.php', ['messages' => $messages, 'querys' => $querys]);
     }
 
     /**
@@ -46,9 +46,9 @@ class MessageController extends Controller
                 foreach ($checkMessagersQuery as $messagerQuery) {
                     $messagerQueryId = $messagerQuery->getId();
                 }
-                return $this->redirectToRoute('write', array('messager_id' => $messagerQueryId));
+                return $this->redirectToRoute('write', ['messager_id' => $messagerQueryId]);
             }
-            return $this->redirectToRoute('write', array('messager_id' => $messager->getId()));
+            return $this->redirectToRoute('write', ['messager_id' => $messager->getId()]);
         }
         if ($form->get('reply')->isClicked() && $form->isValid()) {
             if ($request->query->get('id') == NULL) {
@@ -58,21 +58,21 @@ class MessageController extends Controller
             $messager = $form->getData();
             $em = $this->getDoctrine()->getManager();
 
-             $checkMessagersQuery = $em->getRepository('AppBundle:Messager')
+            $checkMessagersQuery = $em->getRepository('AppBundle:Messager')
                 ->checkMessager($messager->getName(), $messager->getEmail(), $messager->getPhone());
 
             if (!$checkMessagersQuery) {
                 $em->persist($messager);
                 $em->flush();
-                return $this->redirectToRoute('reply', array('messager_id' => $messager->getId(), 'message_id' => $id));
+                return $this->redirectToRoute('reply', ['messager_id' => $messager->getId(), 'message_id' => $id]);
             } else {
                 foreach ($checkMessagersQuery as $messagerQuery) {
                     $messagerQueryId = $messagerQuery->getId();
                 }
-                return $this->redirectToRoute('reply', array('messager_id' => $messagerQueryId, 'message_id' => $id));
+                return $this->redirectToRoute('reply', ['messager_id' => $messagerQueryId, 'message_id' => $id]);
             }
         }
-        return $this->render('message/check_messager.html.php', array('form' => $form->createView()));
+        return $this->render('message/check_messager.html.php', ['form' => $form->createView()]);
     }
 
     /**
@@ -97,7 +97,7 @@ class MessageController extends Controller
             $em->flush();
             return $this->redirectToRoute('index');
         }
-        return $this->render('message/write_message.html.php', array('form' => $form->createView()));
+        return $this->render('message/write_message.html.php', ['form' => $form->createView()]);
     }
 
     /**
@@ -137,11 +137,11 @@ class MessageController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $messageForm = $form->getData();
             $em->getRepository('AppBundle:Message2')
-               ->alterMessage($id, $messageForm->getTitle(), $messageForm->getContent());
+                ->alterMessage($id, $messageForm->getTitle(), $messageForm->getContent());
 
             return $this->redirectToRoute('index');
         }
-        return $this->render('message/alter.html.php', array('form' => $form->createView()));
+        return $this->render('message/alter.html.php', ['form' => $form->createView()]);
     }
 
     /**
@@ -169,6 +169,6 @@ class MessageController extends Controller
             $em->flush();
             return $this->redirectToRoute('index');
         }
-        return $this->render('message/reply.html.php', array('form' => $form->createView()));
+        return $this->render('message/reply.html.php', ['form' => $form->createView()]);
     }
 }
