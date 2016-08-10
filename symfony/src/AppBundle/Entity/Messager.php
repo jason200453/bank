@@ -17,17 +17,17 @@ class Messager
     protected $id = null;
 
     /**
-            *  @ORM\Column(type="string", name="name", length=50, nullable=FALSE) 
+            *  @ORM\Column(type="string", name="name", length=50, nullable=FALSE)
             */
     protected $name = null;
 
     /**
-            *  @ORM\Column(type="string", name="phone", length=10,  nullable=FALSE) 
+            *  @ORM\Column(type="string", name="phone", length=10,  nullable=FALSE)
             */
     protected $phone = null;
 
-    /** 
-            * @ORM\Column(type="string", name="email", length=40, nullable=FALSE) 
+    /**
+            * @ORM\Column(type="string", name="email", length=40, nullable=FALSE)
             */
     protected $email = null;
 
@@ -113,7 +113,7 @@ class Messager
     /**
             * Get message
             *
-            * @return \Doctrine\Common\Collections\Collection 
+            * @return \Doctrine\Common\Collections\Collection
             */
     public function getMessage()
     {
@@ -146,7 +146,7 @@ class Messager
     /**
             * Get reply
             *
-            * @return \Doctrine\Common\Collections\Collection 
+            * @return \Doctrine\Common\Collections\Collection
             */
     public function getReply()
     {
