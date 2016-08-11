@@ -8,7 +8,12 @@ class ReplyRepository extends EntityRepository
     public function selectAllReply()
     {
         return $this->getEntityManager()
-            ->createquery("SELECT r, m, e FROM AppBundle:Reply r JOIN r.message m JOIN r.messager e")
+            ->createQueryBuilder()
+            ->select('r, m, e')
+            ->from('AppBundle:Reply', 'r')
+            ->join('r.message', 'm')
+            ->join('r.messager', 'e')
+            ->getQuery()
             ->getResult();
     }
 }
