@@ -11,8 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 class MessageController extends Controller
 {
     /**
-      * @Route("/message", name="index")
-      */
+     * @Route("/message", name = "index")
+     */
     public function selectAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -23,8 +23,8 @@ class MessageController extends Controller
     }
 
     /**
-      * @Route("/message/check", name="check")
-      */
+     * @Route("/message/check", name = "check")
+     */
     public function checkMessagerAction(Request $request)
     {
         $messager = new Messager();
@@ -43,10 +43,10 @@ class MessageController extends Controller
                 $em->persist($messager);
                 $em->flush();
             } else {
-                foreach ($checkMessagersQuery as $messagerQuery) {
-                    $messagerQueryId = $messagerQuery->getId();
-                }
-                return $this->redirectToRoute('write', ['messagerId' => $messagerQueryId]);
+                //foreach ($checkMessagersQuery as $messagerQuery) {
+                var_dump($checkMessagersQuery);exit;
+                //}
+                return $this->redirectToRoute('write', ['messagerId' => $checkMessagersQuery->getId()]);
             }
             return $this->redirectToRoute('write', ['messagerId' => $messager->getId()]);
         }
@@ -76,8 +76,8 @@ class MessageController extends Controller
     }
 
     /**
-      * @Route("/message/write", name="write")
-      */
+     * @Route("/message/write", name = "write")
+     */
     public function writeMessageAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
@@ -101,8 +101,8 @@ class MessageController extends Controller
     }
 
     /**
-      * @Route("/message/delete", name="delete")
-      */
+     * @Route("/message/delete", name = "delete")
+     */
     public function deleteAction(Request $request)
     {
         $id = $request->query->get('id');
@@ -113,8 +113,8 @@ class MessageController extends Controller
     }
 
     /**
-      * @Route("/message/alter", name="alter")
-      */
+     * @Route("/message/alter", name = "alter")
+     */
     public function alterAction(Request $request)
     {
         $id = $request->query->get('id');
@@ -145,8 +145,8 @@ class MessageController extends Controller
     }
 
     /**
-      * @Route("/message/reply", name="reply")
-      */
+     * @Route("/message/reply", name = "reply")
+     */
     public function replyAction(Request $request)
     {
         $messageId = $request->query->get('messageId');
