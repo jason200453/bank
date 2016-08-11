@@ -46,9 +46,9 @@ class MessageController extends Controller
                 foreach ($checkMessagersQuery as $messagerQuery) {
                     $messagerQueryId = $messagerQuery->getId();
                 }
-                return $this->redirectToRoute('write', ['messager_id' => $messagerQueryId]);
+                return $this->redirectToRoute('write', ['messagerId' => $messagerQueryId]);
             }
-            return $this->redirectToRoute('write', ['messager_id' => $messager->getId()]);
+            return $this->redirectToRoute('write', ['messagerId' => $messager->getId()]);
         }
         if ($form->get('reply')->isClicked() && $form->isValid()) {
             if ($request->query->get('id') == NULL) {
@@ -64,12 +64,12 @@ class MessageController extends Controller
             if (!$checkMessagersQuery) {
                 $em->persist($messager);
                 $em->flush();
-                return $this->redirectToRoute('reply', ['messager_id' => $messager->getId(), 'message_id' => $id]);
+                return $this->redirectToRoute('reply', ['messagerId' => $messager->getId(), 'messageId' => $id]);
             } else {
                 foreach ($checkMessagersQuery as $messagerQuery) {
                     $messagerQueryId = $messagerQuery->getId();
                 }
-                return $this->redirectToRoute('reply', ['messager_id' => $messagerQueryId, 'message_id' => $id]);
+                return $this->redirectToRoute('reply', ['messagerId' => $messagerQueryId, 'messageId' => $id]);
             }
         }
         return $this->render('message/check_messager.html.php', ['form' => $form->createView()]);
@@ -82,8 +82,8 @@ class MessageController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $message = new Message2();
-        $messager_id = $request->query->get('messager_id');
-        $messagerId = $em->find("AppBundle:Messager", $messager_id);
+        $messagerId = $request->query->get('messagerId');
+        $messager = $em->find("AppBundle:Messager", $messagerId);
         $form = $this->createForm(Form\LeaveMessageType::class, $message);
 
         $form->handleRequest($request);
@@ -92,7 +92,7 @@ class MessageController extends Controller
             $messageForm = $form->getData();
             $message->setTitle($messageForm->getTitle());
             $message->setContent($messageForm->getContent());
-            $message->setMessager($messagerId);
+            $message->setMessager($messager);
             $em->persist($message);
             $em->flush();
             return $this->redirectToRoute('index');
@@ -149,11 +149,11 @@ class MessageController extends Controller
       */
     public function replyAction(Request $request)
     {
-        $message_id = $request->query->get('message_id');
-        $messager_id = $request->query->get('messager_id');
+        $messageId = $request->query->get('messageId');
+        $messagerId = $request->query->get('messagerId');
         $em = $this->getDoctrine()->getManager();
-        $messagerId = $em->find("AppBundle:Messager", $messager_id);
-        $messageId = $em->find("AppBundle:Message2", $message_id);
+        $messager = $em->find("AppBundle:Messager", $messagerId);
+        $message = $em->find("AppBundle:Message2", $messageId);
 
         $reply = new Reply();
         $form = $this->createForm(Form\ReplyType::class, $reply);
@@ -163,8 +163,8 @@ class MessageController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $replyForm = $form->getData();
             $reply->setReply($replyForm->getReply());
-            $reply->setMessage($messageId);
-            $reply->setMessager($messagerId);
+            $reply->setMessage($message);
+            $reply->setMessager($messager);
             $em->persist($reply);
             $em->flush();
             return $this->redirectToRoute('index');
