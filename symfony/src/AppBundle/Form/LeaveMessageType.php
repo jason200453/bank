@@ -6,7 +6,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class LeaveMessageType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('title', 'text')
             ->add('content', 'text')
