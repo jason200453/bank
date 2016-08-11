@@ -22,9 +22,9 @@ foreach($messages as $message) {
             <table align="center">
                 <tr>
                     <td><?php echo $message->getTitle()?></td>
-                    <td><a href="<?php echo $view['router']->path('check', array('id' => $message->getId())) ?>"><button type="button"> 回覆</button></a></td>
-                    <td><a href="<?php echo $view['router']->path('delete', array('id' => $message->getId())) ?>"><button type="button"> 刪除</button></a></td>
-                    <td><a href="<?php echo $view['router']->path('alter', array('id' => $message->getId())) ?>"><button type="button">修改</button></a></td>
+                    <td><a href="<?php echo $view['router']->path('check', ['id' => $message->getId()]) ?>"><button type="button"> 回覆</button></a></td>
+                    <td><a href="<?php echo $view['router']->path('delete', ['id' => $message->getId()]) ?>"><button type="button"> 刪除</button></a></td>
+                    <td><a href="<?php echo $view['router']->path('alter', ['id' => $message->getId()]) ?>"><button type="button">修改</button></a></td>
                 </tr>
                 <tr>
                     <td width="25%">暱稱</td>

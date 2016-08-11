@@ -4,36 +4,36 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 /**
-   * @ORM\Entity(repositoryClass="AppBundle\Entity\MessageRepository")
-   * @ORM\Table(name="message2")
-   */
+  * @ORM\Entity(repositoryClass="AppBundle\Entity\MessageRepository")
+  * @ORM\Table(name="message2")
+  */
 class Message2
 {
     /**
-            *  @ORM\Id
-            * @ORM\Column(type="integer")
-            *  @ORM\GeneratedValue
-            */
+      *  @ORM\Id
+      * @ORM\Column(type="integer")
+      *  @ORM\GeneratedValue
+      */
     protected $id = null;
 
     /**
-            *  @ORM\Column(type="string", name="title", length=50, nullable=FALSE)
-            */
+      *  @ORM\Column(type="string", name="title", length=50, nullable=FALSE)
+      */
     protected $title = null;
 
     /**
-            *  @ORM\Column(type="string", name="content", length=100, nullable=FALSE)
-            */
+      *  @ORM\Column(type="string", name="content", length=100, nullable=FALSE)
+      */
     protected $content = null;
 
     /**
-            * @ORM\OneToMany(targetEntity="Reply", mappedBy="message")
-            */
+      * @ORM\OneToMany(targetEntity="Reply", mappedBy="message")
+      */
     protected $replyMessage = null;
 
     /**
-            * @ORM\ManyToOne(targetEntity="Messager", inversedBy="message")
-            */
+      * @ORM\ManyToOne(targetEntity="Messager", inversedBy="message")
+      */
     protected $messager = null;
 
     public function __construct()
@@ -82,11 +82,11 @@ class Message2
     }
 
     /**
-            * Add replyMessage
-            *
-            * @param \AppBundle\Entity\Reply $replyMessage
-            * @return Message2
-            */
+      * Add replyMessage
+      *
+      * @param \AppBundle\Entity\Reply $replyMessage
+      * @return Message2
+      */
     public function addReplyMessage(\AppBundle\Entity\Reply $replyMessage)
     {
         $this->replyMessage[] = $replyMessage;
@@ -95,20 +95,20 @@ class Message2
     }
 
     /**
-            * Remove replyMessage
-            *
-            * @param \AppBundle\Entity\Reply $replyMessage
-            */
+      * Remove replyMessage
+      *
+      * @param \AppBundle\Entity\Reply $replyMessage
+      */
     public function removeReplyMessage(\AppBundle\Entity\Reply $replyMessage)
     {
         $this->replyMessage->removeElement($replyMessage);
     }
 
     /**
-            * Get replyMessage
-            *
-            * @return \Doctrine\Common\Collections\Collection
-            */
+      * Get replyMessage
+      *
+      * @return \Doctrine\Common\Collections\Collection
+      */
     public function getReplyMessage()
     {
         return $this->replyMessage;
