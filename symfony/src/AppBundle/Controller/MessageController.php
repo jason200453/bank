@@ -56,7 +56,7 @@ class MessageController extends Controller
         }
 
         if ($form->get('reply')->isClicked() && $form->isValid()) {
-            if ($request->query->get('id') == NULL) {
+            if ($request->query->get('id') == null) {
                 return $this->redirectToRoute('index');
             }
 

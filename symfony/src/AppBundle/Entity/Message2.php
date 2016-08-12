@@ -19,12 +19,12 @@ class Message2
     protected $id = null;
 
     /**
-     * @ORM\Column(type = "string", name = "title", length = 50, nullable = FALSE)
+     * @ORM\Column(type = "string", name = "title", length = 50, nullable = false)
      */
     protected $title = null;
 
     /**
-     * @ORM\Column(type = "string", name = "content", length = 100, nullable = FALSE)
+     * @ORM\Column(type = "string", name = "content", length = 100, nullable = false)
      */
     protected $content = null;
 

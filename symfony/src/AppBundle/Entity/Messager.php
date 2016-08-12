@@ -19,17 +19,17 @@ class Messager
     protected $id = null;
 
     /**
-     * @ORM\Column(type = "string", name = "name", length = 50, nullable = FALSE)
+     * @ORM\Column(type = "string", name = "name", length = 50, nullable = false)
      */
     protected $name = null;
 
     /**
-     * @ORM\Column(type = "string", name = "phone", length = 10, nullable = FALSE)
+     * @ORM\Column(type = "string", name = "phone", length = 10, nullable = false)
      */
     protected $phone = null;
 
     /**
-     * @ORM\Column(type = "string", name = "email", length = 40, nullable = FALSE)
+     * @ORM\Column(type = "string", name = "email", length = 40, nullable = false)
      */
     protected $email = null;
 
