@@ -8,7 +8,7 @@ class MessagerRepository extends EntityRepository
 {
     public function checkMessager($name, $email, $phone)
     {
-        return $this->getEntityManager()
+        $ckeckMessager = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('e')
             ->from('AppBundle:Messager', 'e')
@@ -20,5 +20,7 @@ class MessagerRepository extends EntityRepository
             ->setParameter('checkphone', $phone)
             ->getQuery()
             ->getResult();
+
+        return $ckeckMessager;
     }
 }

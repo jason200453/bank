@@ -8,29 +8,33 @@ class MessageRepository extends EntityRepository
 {
     public function selectAllMessage()
     {
-        return $this->getEntityManager()
+        $allMessage = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('m', 'e')
             ->from('AppBundle:Message2', 'm')
             ->join('m.messager', 'e')
             ->getQuery()
             ->getResult();
+
+        return $allMessage;
     }
 
     public function deleteMessage($id)
     {
-        return $this->getEntityManager()
+        $delete = $this->getEntityManager()
             ->createQueryBuilder()
             ->delete('AppBundle:Message2', 'm')
             ->where('m.id = :id')
             ->setParameter('id', $id)
             ->getQuery()
             ->getResult();
+
+        return $delete;
     }
 
     public function selectMessage($id)
     {
-        return $this->getEntityManager()
+        $message = $this->getEntityManager()
             ->createQueryBuilder()
             ->select('m', 'e')
             ->from('AppBundle:Message2', 'm')
@@ -39,11 +43,13 @@ class MessageRepository extends EntityRepository
             ->setParameter('id', $id)
             ->getQuery()
             ->getResult();
+
+        return $message;
     }
 
     public function alterMessage($id, $title, $content)
     {
-        return $this->getEntityManager()
+        $alter = $this->getEntityManager()
             ->createQueryBuilder()
             ->update('AppBundle:Message2', 'm')
             ->set('m.title', ':title')
@@ -54,5 +60,7 @@ class MessageRepository extends EntityRepository
             ->setParameter('content', $content)
             ->getQuery()
             ->getResult();
+
+        return $alter;
     }
 }
