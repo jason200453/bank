@@ -19,7 +19,7 @@ class MessagerRepository extends EntityRepository
             ->setParameter('checkemail', $email)
             ->setParameter('checkphone', $phone)
             ->getQuery()
-            ->getResult();
+            ->getOneOrNullResult();
 
         return $ckeckMessager;
     }

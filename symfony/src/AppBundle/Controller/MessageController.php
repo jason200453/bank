@@ -38,21 +38,17 @@ class MessageController extends Controller
             $messager = $form->getData();
             $em = $this->getDoctrine()->getManager();
 
-            $checkMessagersQuery = $em->getRepository('AppBundle:Messager')
+            $checkMessager = $em->getRepository('AppBundle:Messager')
                 ->checkMessager($messager->getName(), $messager->getEmail(), $messager->getPhone());
 
-            if (!$checkMessagersQuery) {
+            if ($checkMessager == null) {
                 $em->persist($messager);
                 $em->flush();
 
                 return $this->redirectToRoute('write', ['messagerId' => $messager->getId()]);
             }
 
-            foreach ($checkMessagersQuery as $messagerQuery) {
-                $messagerQueryId = $messagerQuery->getId();
-            }
-
-            return $this->redirectToRoute('write', ['messagerId' => $messagerQueryId]);
+            return $this->redirectToRoute('write', ['messagerId' => $checkMessager->getId()]);
         }
 
         if ($form->get('reply')->isClicked() && $form->isValid()) {
@@ -64,21 +60,17 @@ class MessageController extends Controller
             $messager = $form->getData();
             $em = $this->getDoctrine()->getManager();
 
-            $checkMessagersQuery = $em->getRepository('AppBundle:Messager')
+            $checkMessager = $em->getRepository('AppBundle:Messager')
                 ->checkMessager($messager->getName(), $messager->getEmail(), $messager->getPhone());
 
-            if (!$checkMessagersQuery) {
+            if ($checkMessager == null) {
                 $em->persist($messager);
                 $em->flush();
 
                 return $this->redirectToRoute('reply', ['messagerId' => $messager->getId(), 'messageId' => $id]);
             }
 
-            foreach ($checkMessagersQuery as $messagerQuery) {
-                $messagerQueryId = $messagerQuery->getId();
-            }
-
-            return $this->redirectToRoute('reply', ['messagerId' => $messagerQueryId, 'messageId' => $id]);
+            return $this->redirectToRoute('reply', ['messagerId' => $checkMessager->getId(), 'messageId' => $id]);
         }
 
         return $this->render('message/check_messager.html.php', ['form' => $form->createView()]);
