@@ -44,15 +44,15 @@ class MessageController extends Controller
             if (!$checkMessagersQuery) {
                 $em->persist($messager);
                 $em->flush();
-            } else {
-                foreach ($checkMessagersQuery as $messagerQuery) {
-                    $messagerQueryId = $messagerQuery->getId();
-                }
 
-                return $this->redirectToRoute('write', ['messagerId' => $messagerQueryId]);
+                return $this->redirectToRoute('write', ['messagerId' => $messager->getId()]);
             }
 
-            return $this->redirectToRoute('write', ['messagerId' => $messager->getId()]);
+            foreach ($checkMessagersQuery as $messagerQuery) {
+                $messagerQueryId = $messagerQuery->getId();
+            }
+
+            return $this->redirectToRoute('write', ['messagerId' => $messagerQueryId]);
         }
 
         if ($form->get('reply')->isClicked() && $form->isValid()) {
@@ -72,13 +72,13 @@ class MessageController extends Controller
                 $em->flush();
 
                 return $this->redirectToRoute('reply', ['messagerId' => $messager->getId(), 'messageId' => $id]);
-            } else {
-                foreach ($checkMessagersQuery as $messagerQuery) {
-                    $messagerQueryId = $messagerQuery->getId();
-                }
-
-                return $this->redirectToRoute('reply', ['messagerId' => $messagerQueryId, 'messageId' => $id]);
             }
+
+            foreach ($checkMessagersQuery as $messagerQuery) {
+                $messagerQueryId = $messagerQuery->getId();
+            }
+
+            return $this->redirectToRoute('reply', ['messagerId' => $messagerQueryId, 'messageId' => $id]);
         }
 
         return $this->render('message/check_messager.html.php', ['form' => $form->createView()]);
