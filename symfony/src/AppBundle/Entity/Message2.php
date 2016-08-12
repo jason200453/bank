@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -11,7 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Message2
 {
     /**
-           * @ORM\Id
+     * @ORM\Id
      * @ORM\Column(type = "integer")
      * @ORM\GeneratedValue
      */
