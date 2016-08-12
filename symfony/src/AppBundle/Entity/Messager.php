@@ -131,7 +131,7 @@ class Messager
     public function addReply(\AppBundle\Entity\Reply $reply)
     {
         $this->reply[] = $reply;
- 
+
         return $this;
     }
 
