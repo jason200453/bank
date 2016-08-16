@@ -89,6 +89,10 @@ class BankController extends Controller
             $balance = $selectBalance->getBalance()-$amountForm->getAmount();
             $amount = $amountForm->getAmount()-$amountForm->getAmount()*2;
 
+            if ($balance<0) {
+                return $this->redirectToRoute('bank');
+            }
+
             $entry->setAccount($user);
             $entry->setDatetime($createTime);
             $entry->setBalance($balance);
