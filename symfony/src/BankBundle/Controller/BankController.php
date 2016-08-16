@@ -24,11 +24,11 @@ class BankController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $account = $form->getData();
+            $accountForm = $form->getData();
             $em = $this->getDoctrine()->getManager();
 
             $checkAccount = $em->getRepository('BankBundle:Account')
-                ->checkAccount($account->getAccount(), $account->getName(), $account->getPhone());
+                ->checkAccount($accountForm->getAccount(), $accountForm->getName(), $accountForm->getPhone());
 
             if (!$checkAccount) {
                 $account->setBalance(0);
