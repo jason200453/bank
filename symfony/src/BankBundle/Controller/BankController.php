@@ -45,11 +45,64 @@ class BankController extends Controller
     }
 
     /**
+     * 銀行存提系統，按鈕分為存款與提款
+     *
      * @Route("/bank/service", name = "service")
      */
     public function serviceAction(Request $request)
     {
-        return $this->render('BankBundle:Default:index.html.twig');
+        $accountId = $request->query->get('accountId');
+        $entry = new Entry();
+        $form = $this->createForm(Form\ServiceType::class, $entry);
+
+        $form->handleRequest($request);
+
+        if ($form->get('add')->isClicked() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $amountForm = $form->getData();
+            $createTime = new \DateTime();
+            $user = $em->find("BankBundle:Account", $accountId);
+            $selectBalance = $em->getRepository('BankBundle:Account')
+                ->selectAccount($accountId);
+            $balance = $selectBalance->getBalance()+$amountForm->getAmount();
+
+            $entry->setAccount($user);
+            $entry->setDatetime($createTime);
+            $entry->setBalance($balance);
+            $entry->setAmount($amountForm->getAmount());
+            $em->persist($entry);
+            $em->flush();
+
+            $em->getRepository('BankBundle:Account')
+                ->alterBalance($balance, $accountId);
+
+            return $this->redirectToRoute('bank');
+        }
+
+        if ($form->get('minus')->isClicked() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $amountForm = $form->getData();
+            $createTime = new \DateTime();
+            $user = $em->find("BankBundle:Account", $accountId);
+            $selectBalance = $em->getRepository('BankBundle:Account')
+                ->selectAccount($accountId);
+            $balance = $selectBalance->getBalance()-$amountForm->getAmount();
+            $amount = $amountForm->getAmount()-$amountForm->getAmount()*2;
+
+            $entry->setAccount($user);
+            $entry->setDatetime($createTime);
+            $entry->setBalance($balance);
+            $entry->setAmount($amount);
+            $em->persist($entry);
+            $em->flush();
+
+            $em->getRepository('BankBundle:Account')
+                ->alterBalance($balance, $accountId);
+
+            return $this->redirectToRoute('bank');
+        }
+
+        return $this->render('bank/service.html.twig', ['form' => $form->createView()]);
     }
 
 }
