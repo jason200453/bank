@@ -90,7 +90,7 @@ class BankController extends Controller
             $amount = $amountForm->getAmount()-$amountForm->getAmount()*2;
 
             if ($balance<0) {
-                return $this->redirectToRoute('bank');
+                return $this->redirectToRoute('show');
             }
 
             $entry->setAccount($user);
@@ -118,6 +118,10 @@ class BankController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entryId = $request->query->get('entryId');
+
+        if (!$entryId) {
+            return $this->render('bank/showerror.html.twig');
+        }
 
         $selectEntry = $em->getRepository('BankBundle:Entry')
                 ->selectEntry($entryId);
