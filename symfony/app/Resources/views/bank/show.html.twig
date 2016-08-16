@@ -1,0 +1,5 @@
+姓名:{{ entry.account.name }}<br>
+交易金額:{{ entry.amount }}<br>
+交易時間:{{ entry.datetime|date('Y-m-d H:i:s') }}<br>
+帳戶餘額:{{ entry.balance }}<br>
+<a href="{{ path('bank') }}"><button type="button">繼續交易</button></a>

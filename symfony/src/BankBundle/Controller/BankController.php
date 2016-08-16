@@ -76,7 +76,7 @@ class BankController extends Controller
             $em->getRepository('BankBundle:Account')
                 ->alterBalance($balance, $accountId);
 
-            return $this->redirectToRoute('bank');
+            return $this->redirectToRoute('show', ['entryId' => $entry->getId()]);
         }
 
         if ($form->get('minus')->isClicked() && $form->isValid()) {
@@ -103,10 +103,26 @@ class BankController extends Controller
             $em->getRepository('BankBundle:Account')
                 ->alterBalance($balance, $accountId);
 
-            return $this->redirectToRoute('bank');
+            return $this->redirectToRoute('show', ['entryId' => $entry->getId()]);
         }
 
         return $this->render('bank/service.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * 交易明細
+     *
+     * @Route("/bank/show", name = "show")
+     */
+    public function showAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entryId = $request->query->get('entryId');
+
+        $selectEntry = $em->getRepository('BankBundle:Entry')
+                ->selectEntry($entryId);
+
+        return $this->render('bank/show.html.twig', ['entry' => $selectEntry]);
     }
 
 }
