@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * 帳戶
  *
- * @ORM\Entity(repositoryClass = "BankBundle\Entity\AccountRepository")
+ * @ORM\Entity()
  * @ORM\Table(name = "account")
  */
 class Account

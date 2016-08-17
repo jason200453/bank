@@ -28,7 +28,7 @@ class BankController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $checkAccount = $em->getRepository('BankBundle:Account')
-                ->checkAccount($accountForm->getAccount(), $accountForm->getName(), $accountForm->getPhone());
+                ->findOneBy(['account' => $accountForm->getAccount(), 'name' => $accountForm->getName(), 'phone' => $accountForm->getPhone()]);
 
             if (!$checkAccount) {
                 $account->setBalance(0);
@@ -62,19 +62,16 @@ class BankController extends Controller
             $amountForm = $form->getData();
             $createTime = new \DateTime();
             $user = $em->find("BankBundle:Account", $accountId);
-            $selectBalance = $em->getRepository('BankBundle:Account')
-                ->selectAccount($accountId);
+            $selectBalance = $em->getRepository('BankBundle:Account')->find($accountId);
             $balance = $selectBalance->getBalance()+$amountForm->getAmount();
 
             $entry->setAccount($user);
             $entry->setDatetime($createTime);
             $entry->setBalance($balance);
             $entry->setAmount($amountForm->getAmount());
+            $user->setBalance($balance);
             $em->persist($entry);
             $em->flush();
-
-            $em->getRepository('BankBundle:Account')
-                ->alterBalance($balance, $accountId);
 
             return $this->redirectToRoute('show', ['entryId' => $entry->getId()]);
         }
@@ -84,8 +81,7 @@ class BankController extends Controller
             $amountForm = $form->getData();
             $createTime = new \DateTime();
             $user = $em->find("BankBundle:Account", $accountId);
-            $selectBalance = $em->getRepository('BankBundle:Account')
-                ->selectAccount($accountId);
+            $selectBalance = $em->getRepository('BankBundle:Account')->find($accountId);
             $balance = $selectBalance->getBalance()-$amountForm->getAmount();
             $amount = $amountForm->getAmount()-$amountForm->getAmount()*2;
 
@@ -97,11 +93,9 @@ class BankController extends Controller
             $entry->setDatetime($createTime);
             $entry->setBalance($balance);
             $entry->setAmount($amount);
+            $user->setBalance($balance);
             $em->persist($entry);
             $em->flush();
-
-            $em->getRepository('BankBundle:Account')
-                ->alterBalance($balance, $accountId);
 
             return $this->redirectToRoute('show', ['entryId' => $entry->getId()]);
         }
@@ -123,8 +117,7 @@ class BankController extends Controller
             return $this->render('bank/showerror.html.twig');
         }
 
-        $selectEntry = $em->getRepository('BankBundle:Entry')
-                ->selectEntry($entryId);
+        $selectEntry = $em->getRepository('BankBundle:Entry')->find($entryId);
 
         return $this->render('bank/show.html.twig', ['entry' => $selectEntry]);
     }
