@@ -23,7 +23,7 @@ class BankController extends Controller
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->get('save')->isClicked() && $form->isValid()) {
             $accountForm = $form->getData();
             $em = $this->getDoctrine()->getManager();
 
@@ -39,6 +39,16 @@ class BankController extends Controller
             }
 
             return $this->redirectToRoute('service', ['accountId' => $checkAccount->getId()]);
+        }
+
+        if ($form->get('list')->isClicked()) {
+            $accountForm = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+
+            $checkAccount = $em->getRepository('BankBundle:Account')
+                ->findOneBy(['account' => $accountForm->getAccount(), 'name' => $accountForm->getName(), 'phone' => $accountForm->getPhone()]);
+
+            return $this->redirectToRoute('list', ['accountId' => $checkAccount->getId()]);
         }
 
         return $this->render('bank/check.html.twig', ['form' => $form->createView()]);
@@ -122,4 +132,21 @@ class BankController extends Controller
         return $this->render('bank/show.html.twig', ['entry' => $selectEntry]);
     }
 
+    /**
+     * 列出歷史交易紀錄
+     *
+     * @Route("/bank/list", name = "list")
+     */
+    public function listAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $accountId = $request->query->get('accountId');
+
+        $allEntry = $em->getRepository('BankBundle:Entry')->findByAccount($accountId);
+
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate($allEntry,$request->query->getInt('page', 1), 10);
+
+        return $this->render('bank/list.html.twig', ['pagination' => $pagination]);
+    }
 }

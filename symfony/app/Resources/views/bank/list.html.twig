@@ -1,0 +1,20 @@
+<h1>交易歷史紀錄</h1>
+<div class="count">
+    總筆數:{{ pagination.getTotalItemCount }}筆
+</div>
+<table>
+{# table body #}
+{% for entry in pagination %}
+<tr {% if loop.index is odd %}class="color"{% endif %}>
+    <li>帳號:{{ entry.account.account }}</li>
+    <li>交易金額:{{ entry.amount }}</li>
+    <li>交易時間:{{ entry.datetime|date('Y-m-d H:i:s') }}</li>
+    <li>帳戶餘額:{{ entry.balance }}</li>
+    --------------------------------------------------------
+</tr>
+{% endfor %}
+</table>
+{# display navigation #}
+<div class="navigation">
+    {{ knp_pagination_render(pagination) }}
+</div>
