@@ -41,16 +41,6 @@ class BankController extends Controller
             return $this->redirectToRoute('service', ['accountId' => $checkAccount->getId()]);
         }
 
-        if ($form->get('list')->isClicked()) {
-            $accountForm = $form->getData();
-            $em = $this->getDoctrine()->getManager();
-
-            $checkAccount = $em->getRepository('BankBundle:Account')
-                ->findOneBy(['account' => $accountForm->getAccount(), 'name' => $accountForm->getName(), 'phone' => $accountForm->getPhone()]);
-
-            return $this->redirectToRoute('list', ['accountId' => $checkAccount->getId()]);
-        }
-
         return $this->render('bank/check.html.twig', ['form' => $form->createView()]);
     }
 
@@ -110,7 +100,7 @@ class BankController extends Controller
             return $this->redirectToRoute('show', ['entryId' => $entry->getId()]);
         }
 
-        return $this->render('bank/service.html.twig', ['form' => $form->createView()]);
+        return $this->render('bank/service.html.twig', ['form' => $form->createView(), 'accountId' => $accountId]);
     }
 
     /**
