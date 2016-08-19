@@ -8,133 +8,139 @@ use BankBundle\Form;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class BankController extends Controller
 {
     /**
-     * 檢查是否曾經使用過銀行存提系統，如果沒有使用過先存入使用者資料
+     * 新增帳戶
      *
-     * @Route("/bank", name = "bank")
+     * @Route("/bank/create", name = "create")
+     * @Method("POST")
      */
-    public function checkAction(Request $request)
+    public function createAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+        $accountNumber = $request->query->get('account');
+        $name = $request->query->get('name');
+        $phone = $request->query->get('phone');
+
+        $checkAccount = $em->getRepository('BankBundle:Account')
+            ->findOneBy(['account' => $accountNumber, 'name' => $name, 'phone' => $phone]);
+
+        if (isset($checkAccount)) {
+            return new JsonResponse(['STATUS' => "Failure"]);
+        }
+
         $account = new Account();
-        $form = $this->createForm(Form\CheckType::class, $account);
+        $account->setBalance(0);
+        $account->setAccount($accountNumber);
+        $account->setName($name);
+        $account->setPhone($phone);
+        $em->persist($account);
+        $em->flush();
 
-        $form->handleRequest($request);
-
-        if ($form->get('save')->isClicked() && $form->isValid()) {
-            $accountForm = $form->getData();
-            $em = $this->getDoctrine()->getManager();
-
-            $checkAccount = $em->getRepository('BankBundle:Account')
-                ->findOneBy(['account' => $accountForm->getAccount(), 'name' => $accountForm->getName(), 'phone' => $accountForm->getPhone()]);
-
-            if (!$checkAccount) {
-                $account->setBalance(0);
-                $em->persist($account);
-                $em->flush();
-
-                return $this->redirectToRoute('service', ['account_id' => $account->getId()]);
-            }
-
-            return $this->redirectToRoute('service', ['account_id' => $checkAccount->getId()]);
-        }
-
-        return $this->render('bank/check.html.twig', ['form' => $form->createView()]);
+        return new JsonResponse(['STATUS' => "Success", 'Account' => $accountNumber, 'Name' => $name, 'Phone' => $phone]);
     }
 
     /**
-     * 銀行存提系統，按鈕分為存款與提款
+     * 存錢
      *
-     * @Route("/bank/service", name = "service")
+     * @Route("/bank/deposit/{accountId}", name = "deposit")
+     * @Method("POST")
      */
-    public function serviceAction(Request $request)
+    public function depositAction(Request $request, $accountId)
     {
-        $accountId = $request->query->get('account_id');
+        $em = $this->getDoctrine()->getManager();
+        $amount = $request->query->get('amount');
+        $createTime = new \DateTime();
+        $account = $em->find('BankBundle:Account', $accountId);
+        $balance = $account->getBalance() + $amount;
+
         $entry = new Entry();
-        $form = $this->createForm(Form\ServiceType::class, $entry);
+        $entry->setAccount($account);
+        $entry->setDatetime($createTime);
+        $entry->setBalance($balance);
+        $entry->setAmount($amount);
+        $account->setBalance($balance);
+        $em->persist($entry);
+        $em->flush();
 
-        $form->handleRequest($request);
-
-        if ($form->get('add')->isClicked() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $amountForm = $form->getData();
-            $createTime = new \DateTime();
-            $user = $em->find('BankBundle:Account', $accountId);
-            $balance = $user->getBalance() + $amountForm->getAmount();
-
-            $entry->setAccount($user);
-            $entry->setDatetime($createTime);
-            $entry->setBalance($balance);
-            $entry->setAmount($amountForm->getAmount());
-            $user->setBalance($balance);
-            $em->persist($entry);
-            $em->flush();
-
-            return $this->redirectToRoute('show', ['entry_id' => $entry->getId()]);
-        }
-
-        if ($form->get('minus')->isClicked() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $amountForm = $form->getData();
-            $createTime = new \DateTime();
-            $user = $em->find('BankBundle:Account', $accountId);
-            $balance = $user->getBalance() - $amountForm->getAmount();
-            $amount = $amountForm->getAmount() - $amountForm->getAmount() * 2;
-
-            if ($balance < 0) {
-                return $this->redirectToRoute('show');
-            }
-
-            $entry->setAccount($user);
-            $entry->setDatetime($createTime);
-            $entry->setBalance($balance);
-            $entry->setAmount($amount);
-            $user->setBalance($balance);
-            $em->persist($entry);
-            $em->flush();
-
-            return $this->redirectToRoute('show', ['entry_id' => $entry->getId()]);
-        }
-
-        return $this->render('bank/service.html.twig', ['form' => $form->createView(), 'account_id' => $accountId]);
+        return new JsonResponse(['STATUS' => "Success", 'Account' => $account->getAccount(), 'Amount' => $amount, 'CreateTime' => $createTime, 'Balance' => $balance]);
     }
 
     /**
-     * 交易明細
+     * 領錢
      *
-     * @Route("/bank/show", name = "show")
+     * @Route("/bank/withdraw/{accountId}", name = "withdraw")
+     * @Method("POST")
      */
-    public function showAction(Request $request)
+    public function withdrawAction(Request $request, $accountId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $amount = $request->query->get('amount') - $request->query->get('amount') * 2;
+        $createTime = new \DateTime();
+        $account = $em->find('BankBundle:Account', $accountId);
+        $balance = $account->getBalance() + $amount;
+
+        if ($balance < 0) {
+            return new JsonResponse(['STATUS' => "Failure"]);
+        }
+
+        $entry = new Entry();
+        $entry->setAccount($account);
+        $entry->setDatetime($createTime);
+        $entry->setBalance($balance);
+        $entry->setAmount($amount);
+        $account->setBalance($balance);
+        $em->persist($entry);
+        $em->flush();
+
+        return new JsonResponse(['STATUS' => "Success", 'Account' => $account->getAccount(), 'Amount' => $amount, 'CreateTime' => $createTime, 'Balance' => $balance]);
+    }
+
+    /**
+     * 列出交易紀錄
+     *
+     * @Route("/bank/list/{accountId}", name = "list")
+     * @Method("GET")
+     */
+    public function showAction(Request $request, $accountId)
     {
         $em = $this->getDoctrine()->getManager();
         $entryId = $request->query->get('entry_id');
 
-        if (!$entryId) {
-            return $this->render('bank/showerror.html.twig');
+        if(!$entryId) {
+            $entry = $em->getRepository('BankBundle:Entry')->selectEntry($accountId);
+
+            return new JsonResponse($entry);
         }
 
         $selectEntry = $em->find('BankBundle:Entry', $entryId);
 
-        return $this->render('bank/show.html.twig', ['entry' => $selectEntry]);
+    return new JsonResponse(['Account' => $selectEntry->getAccount()->getAccount(), 'Amount' => $selectEntry->getAmount(), 'CreateTime' => $selectEntry->getDatetime(), 'Balance' => $selectEntry->getBalance()]);
     }
 
     /**
-     * 列出歷史交易紀錄
+     * 刪除帳戶
      *
-     * @Route("/bank/list", name = "list")
+     * @Route("/bank/delete", name = "delete_account")
+     * @Method("DELETE")
      */
-    public function listAction(Request $request)
+    public function deleteAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $accountId = $request->query->get('account_id');
+        $account = $em->find('BankBundle:Account', $accountId);
 
-        $allEntry = $em->getRepository('BankBundle:Entry')->findByAccount($accountId);
+        if (!$account){
+            return new JsonResponse(['STATUS' => "Failure"]);
+        }
 
-        $paginator  = $this->get('knp_paginator');
-        $pagination = $paginator->paginate($allEntry, $request->query->getInt('page', 1), 10);
+        $em->remove($account);
+        $em->flush();
 
-        return $this->render('bank/list.html.twig', ['pagination' => $pagination]);
+        return new JsonResponse(['STATUS' => "Success"]);
     }
 }

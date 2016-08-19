@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * 明細
  *
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass = "BankBundle\Entity\EntryRepository")
  * @ORM\Table(name = "entry")
  */
 class Entry
