@@ -62,8 +62,7 @@ class BankController extends Controller
             $amountForm = $form->getData();
             $createTime = new \DateTime();
             $user = $em->find("BankBundle:Account", $accountId);
-            $selectBalance = $em->getRepository('BankBundle:Account')->find($accountId);
-            $balance = $selectBalance->getBalance() + $amountForm->getAmount();
+            $balance = $user->getBalance() + $amountForm->getAmount();
 
             $entry->setAccount($user);
             $entry->setDatetime($createTime);
@@ -81,8 +80,7 @@ class BankController extends Controller
             $amountForm = $form->getData();
             $createTime = new \DateTime();
             $user = $em->find("BankBundle:Account", $accountId);
-            $selectBalance = $em->getRepository('BankBundle:Account')->find($accountId);
-            $balance = $selectBalance->getBalance() - $amountForm->getAmount();
+            $balance = $user->getBalance() - $amountForm->getAmount();
             $amount = $amountForm->getAmount() - $amountForm->getAmount() * 2;
 
             if ($balance < 0) {
