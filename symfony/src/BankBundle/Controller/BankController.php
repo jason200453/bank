@@ -61,7 +61,7 @@ class BankController extends Controller
             $em = $this->getDoctrine()->getManager();
             $amountForm = $form->getData();
             $createTime = new \DateTime();
-            $user = $em->find("BankBundle:Account", $accountId);
+            $user = $em->find('BankBundle:Account', $accountId);
             $balance = $user->getBalance() + $amountForm->getAmount();
 
             $entry->setAccount($user);
@@ -79,7 +79,7 @@ class BankController extends Controller
             $em = $this->getDoctrine()->getManager();
             $amountForm = $form->getData();
             $createTime = new \DateTime();
-            $user = $em->find("BankBundle:Account", $accountId);
+            $user = $em->find('BankBundle:Account', $accountId);
             $balance = $user->getBalance() - $amountForm->getAmount();
             $amount = $amountForm->getAmount() - $amountForm->getAmount() * 2;
 
@@ -115,7 +115,7 @@ class BankController extends Controller
             return $this->render('bank/showerror.html.twig');
         }
 
-        $selectEntry = $em->getRepository('BankBundle:Entry')->find($entryId);
+        $selectEntry = $em->find('BankBundle:Entry', $entryId);
 
         return $this->render('bank/show.html.twig', ['entry' => $selectEntry]);
     }
