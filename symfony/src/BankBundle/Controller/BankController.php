@@ -63,7 +63,7 @@ class BankController extends Controller
             $createTime = new \DateTime();
             $user = $em->find("BankBundle:Account", $accountId);
             $selectBalance = $em->getRepository('BankBundle:Account')->find($accountId);
-            $balance = $selectBalance->getBalance()+$amountForm->getAmount();
+            $balance = $selectBalance->getBalance() + $amountForm->getAmount();
 
             $entry->setAccount($user);
             $entry->setDatetime($createTime);
@@ -82,10 +82,10 @@ class BankController extends Controller
             $createTime = new \DateTime();
             $user = $em->find("BankBundle:Account", $accountId);
             $selectBalance = $em->getRepository('BankBundle:Account')->find($accountId);
-            $balance = $selectBalance->getBalance()-$amountForm->getAmount();
-            $amount = $amountForm->getAmount()-$amountForm->getAmount()*2;
+            $balance = $selectBalance->getBalance() - $amountForm->getAmount();
+            $amount = $amountForm->getAmount() - $amountForm->getAmount() * 2;
 
-            if ($balance<0) {
+            if ($balance < 0) {
                 return $this->redirectToRoute('show');
             }
 
@@ -135,7 +135,7 @@ class BankController extends Controller
         $allEntry = $em->getRepository('BankBundle:Entry')->findByAccount($accountId);
 
         $paginator  = $this->get('knp_paginator');
-        $pagination = $paginator->paginate($allEntry,$request->query->getInt('page', 1), 10);
+        $pagination = $paginator->paginate($allEntry, $request->query->getInt('page', 1), 10);
 
         return $this->render('bank/list.html.twig', ['pagination' => $pagination]);
     }
