@@ -35,10 +35,10 @@ class BankController extends Controller
                 $em->persist($account);
                 $em->flush();
 
-                return $this->redirectToRoute('service', ['accountId' => $account->getId()]);
+                return $this->redirectToRoute('service', ['account_id' => $account->getId()]);
             }
 
-            return $this->redirectToRoute('service', ['accountId' => $checkAccount->getId()]);
+            return $this->redirectToRoute('service', ['account_id' => $checkAccount->getId()]);
         }
 
         return $this->render('bank/check.html.twig', ['form' => $form->createView()]);
@@ -51,7 +51,7 @@ class BankController extends Controller
      */
     public function serviceAction(Request $request)
     {
-        $accountId = $request->query->get('accountId');
+        $accountId = $request->query->get('account_id');
         $entry = new Entry();
         $form = $this->createForm(Form\ServiceType::class, $entry);
 
@@ -73,7 +73,7 @@ class BankController extends Controller
             $em->persist($entry);
             $em->flush();
 
-            return $this->redirectToRoute('show', ['entryId' => $entry->getId()]);
+            return $this->redirectToRoute('show', ['entry_id' => $entry->getId()]);
         }
 
         if ($form->get('minus')->isClicked() && $form->isValid()) {
@@ -97,10 +97,10 @@ class BankController extends Controller
             $em->persist($entry);
             $em->flush();
 
-            return $this->redirectToRoute('show', ['entryId' => $entry->getId()]);
+            return $this->redirectToRoute('show', ['entry_id' => $entry->getId()]);
         }
 
-        return $this->render('bank/service.html.twig', ['form' => $form->createView(), 'accountId' => $accountId]);
+        return $this->render('bank/service.html.twig', ['form' => $form->createView(), 'account_id' => $accountId]);
     }
 
     /**
@@ -111,7 +111,7 @@ class BankController extends Controller
     public function showAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $entryId = $request->query->get('entryId');
+        $entryId = $request->query->get('entry_id');
 
         if (!$entryId) {
             return $this->render('bank/showerror.html.twig');
@@ -130,7 +130,7 @@ class BankController extends Controller
     public function listAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $accountId = $request->query->get('accountId');
+        $accountId = $request->query->get('account_id');
 
         $allEntry = $em->getRepository('BankBundle:Entry')->findByAccount($accountId);
 
