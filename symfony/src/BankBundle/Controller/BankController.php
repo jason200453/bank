@@ -24,9 +24,9 @@ class BankController extends Controller
     public function createAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $accountNumber = $request->query->get('account');
-        $name = $request->query->get('name');
-        $phone = $request->query->get('phone');
+        $accountNumber = $request->request->get('account');
+        $name = $request->request->get('name');
+        $phone = $request->request->get('phone');
 
         $checkAccount = $em->getRepository('BankBundle:Account')
             ->findOneBy(['account' => $accountNumber, 'name' => $name, 'phone' => $phone]);
@@ -55,7 +55,7 @@ class BankController extends Controller
     public function depositAction(Request $request, $accountId)
     {
         $em = $this->getDoctrine()->getManager();
-        $amount = $request->query->get('amount');
+        $amount = $request->request->get('amount');
         $createTime = new \DateTime();
         $account = $em->find('BankBundle:Account', $accountId);
         $balance = $account->getBalance() + $amount;
@@ -81,7 +81,7 @@ class BankController extends Controller
     public function withdrawAction(Request $request, $accountId)
     {
         $em = $this->getDoctrine()->getManager();
-        $amount = $request->query->get('amount') - $request->query->get('amount') * 2;
+        $amount = $request->request->get('amount') - $request->request->get('amount') * 2;
         $createTime = new \DateTime();
         $account = $em->find('BankBundle:Account', $accountId);
         $balance = $account->getBalance() + $amount;
@@ -108,7 +108,7 @@ class BankController extends Controller
      * @Route("/bank/list", name = "list")
      * @Method("GET")
      */
-    public function showAction(Request $request)
+    public function listAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $entryId = $request->query->get('entry_id');
