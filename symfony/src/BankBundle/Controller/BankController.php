@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class BankController extends Controller
 {
@@ -103,23 +105,44 @@ class BankController extends Controller
     /**
      * 列出交易紀錄
      *
-     * @Route("/bank/list/{accountId}", name = "list")
+     * @Route("/bank/list", name = "list")
      * @Method("GET")
      */
-    public function showAction(Request $request, $accountId)
+    public function showAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $entryId = $request->query->get('entry_id');
+        $offset = $request->query->get('offset');
+        $limit = $request->query->get('limit');
+        $accountId = $request->query->get('account_id');
 
-        if(!$entryId) {
-            $entry = $em->getRepository('BankBundle:Entry')->selectEntry($accountId);
+        if (!$accountId) {
+            $allEntry = $em->getRepository('BankBundle:Entry')->allEntry($offset, $limit);
+
+            if (!$allEntry){
+                return new JsonResponse(['STATUS' => "Failure"]);
+            }
+
+            return new JsonResponse($allEntry);
+        }
+
+        if (!$entryId) {
+            $entry = $em->getRepository('BankBundle:Entry')->selectEntry($accountId, $offset, $limit);
+
+            if (!$entry){
+                return new JsonResponse(['STATUS' => "Failure"]);
+            }
 
             return new JsonResponse($entry);
         }
 
         $selectEntry = $em->find('BankBundle:Entry', $entryId);
 
-    return new JsonResponse(['Account' => $selectEntry->getAccount()->getAccount(), 'Amount' => $selectEntry->getAmount(), 'CreateTime' => $selectEntry->getDatetime(), 'Balance' => $selectEntry->getBalance()]);
+        if (!$selectEntry){
+            return new JsonResponse(['STATUS' => "Failure"]);
+        }
+
+        return new JsonResponse(['Account' => $selectEntry->getAccount()->getAccount(), 'Amount' => $selectEntry->getAmount(), 'CreateTime' => $selectEntry->getDatetime(), 'Balance' => $selectEntry->getBalance()]);
     }
 
     /**
