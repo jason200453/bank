@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Doctrine\DBAL\LockMode;
 
 class BankController extends Controller
 {
@@ -55,19 +56,28 @@ class BankController extends Controller
     public function depositAction(Request $request, $accountId)
     {
         $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();
         $amount = $request->request->get('amount');
         $createTime = new \DateTime();
-        $account = $em->find('BankBundle:Account', $accountId);
-        $balance = $account->getBalance() + $amount;
 
-        $entry = new Entry();
-        $entry->setAccount($account);
-        $entry->setDatetime($createTime);
-        $entry->setBalance($balance);
-        $entry->setAmount($amount);
-        $account->setBalance($balance);
-        $em->persist($entry);
-        $em->flush();
+        try {
+            $account = $em->find('BankBundle:Account', $accountId, LockMode::PESSIMISTIC_WRITE);
+            $balance = $account->getBalance() + $amount;
+
+            $entry = new Entry();
+            $entry->setAccount($account);
+            $entry->setDatetime($createTime);
+            $entry->setBalance($balance);
+            $entry->setAmount($amount);
+            $account->setBalance($balance);
+            $em->persist($entry);
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollBack();
+
+            throw $e;
+        }
 
         return new JsonResponse(['STATUS' => "Success", 'Account' => $account->getAccount(), 'Amount' => $amount, 'CreateTime' => $createTime, 'Balance' => $balance]);
     }
@@ -81,23 +91,32 @@ class BankController extends Controller
     public function withdrawAction(Request $request, $accountId)
     {
         $em = $this->getDoctrine()->getManager();
+        $em->getConnection()->beginTransaction();
         $amount = $request->request->get('amount') - $request->request->get('amount') * 2;
         $createTime = new \DateTime();
-        $account = $em->find('BankBundle:Account', $accountId);
-        $balance = $account->getBalance() + $amount;
 
-        if ($balance < 0) {
-            return new JsonResponse(['STATUS' => "Failure"]);
+        try {
+            $account = $em->find('BankBundle:Account', $accountId, LockMode::PESSIMISTIC_WRITE);
+            $balance = $account->getBalance() + $amount;
+
+            if ($balance < 0) {
+                return new JsonResponse(['STATUS' => "Failure"]);
+            }
+
+            $entry = new Entry();
+            $entry->setAccount($account);
+            $entry->setDatetime($createTime);
+            $entry->setBalance($balance);
+            $entry->setAmount($amount);
+            $account->setBalance($balance);
+            $em->persist($entry);
+            $em->flush();
+            $em->getConnection()->commit();
+        } catch (Exception $e) {
+            $em->getConnection()->rollBack();
+
+            throw $e;
         }
-
-        $entry = new Entry();
-        $entry->setAccount($account);
-        $entry->setDatetime($createTime);
-        $entry->setBalance($balance);
-        $entry->setAmount($amount);
-        $account->setBalance($balance);
-        $em->persist($entry);
-        $em->flush();
 
         return new JsonResponse(['STATUS' => "Success", 'Account' => $account->getAccount(), 'Amount' => $amount, 'CreateTime' => $createTime, 'Balance' => $balance]);
     }
