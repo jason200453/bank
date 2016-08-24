@@ -116,35 +116,13 @@ class BankController extends Controller
         $limit = $request->query->get('limit');
         $accountId = $request->query->get('account_id');
 
-        if (isset($entryId)) {
-            $selectEntry = $em->find('BankBundle:Entry', $entryId);
+        $entry = $em->getRepository('BankBundle:Entry')->selectEntry($entryId, $accountId, $offset, $limit);
 
-            if (!$selectEntry){
-                return new JsonResponse(['STATUS' => "Failure"]);
-            }
-
-            return new JsonResponse(['Account' => $selectEntry->getAccount()->getAccount(), 'Amount' => $selectEntry->getAmount(), 'CreateTime' => $selectEntry->getDatetime(), 'Balance' => $selectEntry->getBalance()]);
+        if (!$entry) {
+            return new JsonResponse(['STATUS' => "Failure"]);
         }
 
-        if (!$accountId & !$entryId) {
-            $allEntry = $em->getRepository('BankBundle:Entry')->allEntry($offset, $limit);
-
-            if (!$allEntry){
-                return new JsonResponse(['STATUS' => "Failure"]);
-            }
-
-            return new JsonResponse($allEntry);
-        }
-
-        if (isset($accountId)) {
-            $entry = $em->getRepository('BankBundle:Entry')->selectEntry($accountId, $offset, $limit);
-
-            if (!$entry){
-                return new JsonResponse(['STATUS' => "Failure"]);
-            }
-
-            return new JsonResponse($entry);
-        }
+        return new JsonResponse($entry);
     }
 
     /**
