@@ -92,7 +92,7 @@ class BankController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $em->getConnection()->beginTransaction();
-        $amount = $request->request->get('amount') - $request->request->get('amount') * 2;
+        $amount = $request->request->get('amount') * -1;
         $createTime = new \DateTime();
 
         try {
@@ -153,7 +153,7 @@ class BankController extends Controller
     public function deleteAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $accountId = $request->query->get('account_id');
+        $accountId = $request->request->get('account_id');
         $account = $em->find('BankBundle:Account', $accountId);
 
         if (!$account){
@@ -163,6 +163,6 @@ class BankController extends Controller
         $em->remove($account);
         $em->flush();
 
-        return new JsonResponse(['STATUS' => "Success"]);
+        return new JsonResponse(['STATUS' => "Success", 'Account' => $account->getAccount()]);
     }
 }
