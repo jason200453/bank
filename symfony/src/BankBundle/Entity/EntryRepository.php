@@ -10,7 +10,6 @@ class EntryRepository extends EntityRepository
     {
         $selectEntry = $this->getEntityManager()->createQueryBuilder();
 
-
         $selectEntry->select('e, a');
         $selectEntry->from('BankBundle:Entry', 'e');
         $selectEntry->join('e.account', 'a');
