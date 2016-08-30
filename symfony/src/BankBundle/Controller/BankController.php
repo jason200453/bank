@@ -33,7 +33,7 @@ class BankController extends Controller
             ->findOneBy(['account' => $accountNumber, 'name' => $name, 'phone' => $phone]);
 
         if (isset($checkAccount)) {
-            return new JsonResponse(['STATUS' => "Failure"]);
+            return new JsonResponse(['status' => "failure"]);
         }
 
         $account = new Account();
@@ -44,7 +44,7 @@ class BankController extends Controller
         $em->persist($account);
         $em->flush();
 
-        return new JsonResponse(['STATUS' => "Success", 'Account' => $accountNumber, 'Name' => $name, 'Phone' => $phone]);
+        return new JsonResponse(['status' => "success", 'account' => $accountNumber, 'name' => $name, 'phone' => $phone]);
     }
 
     /**
@@ -79,7 +79,7 @@ class BankController extends Controller
             throw $e;
         }
 
-        return new JsonResponse(['STATUS' => "Success", 'Account' => $account->getAccount(), 'Amount' => $amount, 'CreateTime' => $createTime, 'Balance' => $balance]);
+        return new JsonResponse(['status' => "success", 'account' => $account->getAccount(), 'amount' => $amount, 'create_time' => $createTime, 'balance' => $balance]);
     }
 
     /**
@@ -100,7 +100,7 @@ class BankController extends Controller
             $balance = $account->getBalance() + $amount;
 
             if ($balance < 0) {
-                return new JsonResponse(['STATUS' => "Failure"]);
+                return new JsonResponse(['status' => "failure"]);
             }
 
             $entry = new Entry();
@@ -118,7 +118,7 @@ class BankController extends Controller
             throw $e;
         }
 
-        return new JsonResponse(['STATUS' => "Success", 'Account' => $account->getAccount(), 'Amount' => $amount, 'CreateTime' => $createTime, 'Balance' => $balance]);
+        return new JsonResponse(['status' => "success", 'account' => $account->getAccount(), 'amount' => $amount, 'create_time' => $createTime, 'balance' => $balance]);
     }
 
     /**
@@ -138,7 +138,7 @@ class BankController extends Controller
         $entry = $em->getRepository('BankBundle:Entry')->selectEntry($entryId, $accountId, $offset, $limit);
 
         if (!$entry) {
-            return new JsonResponse(['STATUS' => "Failure"]);
+            return new JsonResponse(['status' => "failure"]);
         }
 
         return new JsonResponse($entry);
@@ -157,12 +157,12 @@ class BankController extends Controller
         $account = $em->find('BankBundle:Account', $accountId);
 
         if (!$account){
-            return new JsonResponse(['STATUS' => "Failure"]);
+            return new JsonResponse(['status' => "failure"]);
         }
 
         $em->remove($account);
         $em->flush();
 
-        return new JsonResponse(['STATUS' => "Success", 'Account' => $account->getAccount()]);
+        return new JsonResponse(['status' => "success", 'account' => $account->getAccount()]);
     }
 }
