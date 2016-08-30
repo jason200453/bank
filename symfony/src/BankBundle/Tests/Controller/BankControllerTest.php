@@ -15,8 +15,10 @@ class BankControllerTest extends WebTestCase
         $this->loadFixtures($classes);
     }
 
-    /*
-     * 測試listAction列出交易名細-成功
+    /**
+     * 測試listAction列出交易名細成功
+     *
+     * @group list
      */
     public function testListSuccess()
     {
@@ -30,11 +32,13 @@ class BankControllerTest extends WebTestCase
         $this->assertEquals(2000, $output[0]['amount']);
         $this->assertEquals(1, $output[0]['account']['id']);
         $this->assertEquals(2000, $output[0]['balance']);
-        $this->assertCount(1, ['id']);
+        $this->assertCount(1, $output);
     }
 
-    /*
-     * 測試listAction列出交易名細-失敗
+    /**
+     * 測試listAction列出交易名細失敗
+     *
+     * @group list
      */
     public function testListFail()
     {
@@ -44,11 +48,13 @@ class BankControllerTest extends WebTestCase
         $json = $client->getResponse()->getContent();
         $output = json_decode($json, true);
 
-        $this->assertEquals('Failure', $output['STATUS']);
+        $this->assertEquals('failure', $output['status']);
     }
 
-    /*
-     * 測試createAction新增帳戶-成功
+    /**
+     * 測試createAction新增帳戶成功
+     *
+     * @group create
      */
     public function testCreateSuccess()
     {
@@ -58,13 +64,15 @@ class BankControllerTest extends WebTestCase
         $json = $client->getResponse()->getContent();
         $output = json_decode($json, true);
 
-        $this->assertEquals('456987125', $output['Account']);
-        $this->assertEquals('overwatch', $output['Name']);
-        $this->assertEquals('0972654197', $output['Phone']);
+        $this->assertEquals('456987125', $output['account']);
+        $this->assertEquals('overwatch', $output['name']);
+        $this->assertEquals('0972654197', $output['phone']);
     }
 
-    /*
-     * 測試createAction新增帳戶-失敗
+    /**
+     * 測試createAction新增帳戶失敗
+     *
+     * @group create
      */
     public function testCreateFail()
     {
@@ -74,11 +82,13 @@ class BankControllerTest extends WebTestCase
         $json = $client->getResponse()->getContent();
         $output = json_decode($json, true);
 
-        $this->assertEquals('Failure', $output['STATUS']);
+        $this->assertEquals('failure', $output['status']);
     }
 
-    /*
-     * 測試deleteAction刪除帳戶-成功
+    /**
+     * 測試deleteAction刪除帳戶成功
+     *
+     * @group delete
      */
     public function testDeleteSuccess()
     {
@@ -88,12 +98,21 @@ class BankControllerTest extends WebTestCase
         $json = $client->getResponse()->getContent();
         $output = json_decode($json, true);
 
-        $this->assertEquals('Success', $output['STATUS']);
-        $this->assertEquals('1234567890', $output['Account']);
+        $this->assertEquals('success', $output['status']);
+        $this->assertEquals('1234567890', $output['account']);
+
+        $client->request('DELETE', '/bank/delete', ['account_id' => 1]);
+
+        $jsonCheck = $client->getResponse()->getContent();
+        $outputCheck = json_decode($jsonCheck, true);
+
+        $this->assertEquals('failure', $outputCheck['status']);
     }
 
-    /*
-     * 測試deleteAction刪除帳戶-失敗
+    /**
+     * 測試deleteAction刪除帳戶失敗
+     *
+     * @group delete
      */
     public function testDeleteFail()
     {
@@ -103,11 +122,13 @@ class BankControllerTest extends WebTestCase
         $json = $client->getResponse()->getContent();
         $output = json_decode($json, true);
 
-        $this->assertEquals('Failure', $output['STATUS']);
+        $this->assertEquals('failure', $output['status']);
     }
 
     /**
      * 測試depositAction存錢
+     *
+     * @group deposit
      */
     public function testDepositSuccess()
     {
@@ -117,14 +138,23 @@ class BankControllerTest extends WebTestCase
         $json = $client->getResponse()->getContent();
         $output = json_decode($json, true);
 
-        $this->assertEquals('Success', $output['STATUS']);
-        $this->assertEquals(2000, $output['Amount']);
-        $this->assertEquals('1234567890', $output['Account']);
-        $this->assertEquals(4000, $output['Balance']);
+        $this->assertEquals('success', $output['status']);
+        $this->assertEquals(2000, $output['amount']);
+        $this->assertEquals('1234567890', $output['account']);
+        $this->assertEquals(4000, $output['balance']);
+
+        $client->request('GET', '/bank/list', ['account_id' => 1]);
+
+        $jsonCheck = $client->getResponse()->getContent();
+        $outputCheck = json_decode($jsonCheck, true);
+
+        $this->assertCount(2, $outputCheck);
     }
 
-    /*
-     * 測試withdrawAction領錢-成功
+    /**
+     * 測試withdrawAction領錢成功
+     *
+     * @group withdraw
      */
     public function testWithdrawSuccess()
     {
@@ -134,14 +164,23 @@ class BankControllerTest extends WebTestCase
         $json = $client->getResponse()->getContent();
         $output = json_decode($json, true);
 
-        $this->assertEquals('Success', $output['STATUS']);
-        $this->assertEquals(-2000, $output['Amount']);
-        $this->assertEquals('1234567890', $output['Account']);
-        $this->assertEquals(0, $output['Balance']);
+        $this->assertEquals('success', $output['status']);
+        $this->assertEquals(-2000, $output['amount']);
+        $this->assertEquals('1234567890', $output['account']);
+        $this->assertEquals(0, $output['balance']);
+
+        $client->request('GET', '/bank/list', ['account_id' => 1]);
+
+        $jsonCheck = $client->getResponse()->getContent();
+        $outputCheck = json_decode($jsonCheck, true);
+
+        $this->assertCount(2, $outputCheck);
     }
 
-    /*
-     * 測試withdrawAction領錢-失敗
+    /**
+     * 測試withdrawAction領錢失敗
+     *
+     * @group withdraw
      */
     public function testWithdrawFail()
     {
@@ -151,6 +190,6 @@ class BankControllerTest extends WebTestCase
         $json = $client->getResponse()->getContent();
         $output = json_decode($json, true);
 
-        $this->assertEquals('Failure', $output['STATUS']);
+        $this->assertEquals('failure', $output['status']);
     }
 }
