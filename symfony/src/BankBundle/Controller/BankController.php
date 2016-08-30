@@ -4,14 +4,11 @@ namespace BankBundle\Controller;
 
 use BankBundle\Entity\Account;
 use BankBundle\Entity\Entry;
-use BankBundle\Form;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Doctrine\DBAL\LockMode;
 
 class BankController extends Controller
