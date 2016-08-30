@@ -49,6 +49,12 @@ class Account
     private $balance = null;
 
     /**
+     * @ORM\Version
+     * @ORM\Column(type="integer")
+     */
+    private $version;
+
+    /**
      * @ORM\OneToMany(targetEntity = "Entry", mappedBy = "account")
      */
     private $entry;
@@ -66,6 +72,16 @@ class Account
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * 取得version
+     *
+     * @return integer
+     */
+    public function getVersion()
+    {
+        return $this->version;
     }
 
     /**

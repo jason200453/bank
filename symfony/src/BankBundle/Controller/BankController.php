@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\DBAL\LockMode;
+use Doctrine\ORM\OptimisticLockException;
 
 class BankController extends Controller
 {
@@ -56,9 +57,10 @@ class BankController extends Controller
         $em->getConnection()->beginTransaction();
         $amount = $request->request->get('amount');
         $createTime = new \DateTime();
+        $version = $em->find('BankBundle:Account', $accountId)->getVersion();
 
         try {
-            $account = $em->find('BankBundle:Account', $accountId, LockMode::PESSIMISTIC_WRITE);
+            $account = $em->find('BankBundle:Account', $accountId, LockMode::OPTIMISTIC, $version);
             $balance = $account->getBalance() + $amount;
 
             $entry = new Entry();
@@ -70,7 +72,7 @@ class BankController extends Controller
             $em->persist($entry);
             $em->flush();
             $em->getConnection()->commit();
-        } catch (Exception $e) {
+        } catch (OptimisticLockException  $e) {
             $em->getConnection()->rollBack();
 
             throw $e;
@@ -91,9 +93,10 @@ class BankController extends Controller
         $em->getConnection()->beginTransaction();
         $amount = $request->request->get('amount') * -1;
         $createTime = new \DateTime();
+        $version = $em->find('BankBundle:Account', $accountId)->getVersion();
 
         try {
-            $account = $em->find('BankBundle:Account', $accountId, LockMode::PESSIMISTIC_WRITE);
+            $account = $em->find('BankBundle:Account', $accountId, LockMode::OPTIMISTIC, $version);
             $balance = $account->getBalance() + $amount;
 
             if ($balance < 0) {
