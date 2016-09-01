@@ -5,12 +5,10 @@ namespace BankBundle\Controller;
 use BankBundle\Entity\Account;
 use BankBundle\Entity\Entry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Doctrine\DBAL\LockMode;
-use Doctrine\ORM\OptimisticLockException;
 
 class BankController extends Controller
 {
@@ -54,26 +52,26 @@ class BankController extends Controller
     public function depositAction(Request $request, $accountId)
     {
         $em = $this->getDoctrine()->getManager();
-        $em->getConnection()->beginTransaction();
         $amount = $request->request->get('amount');
         $createTime = new \DateTime();
-        $version = $em->find('BankBundle:Account', $accountId)->getVersion();
+        $redis = $this->container->get('snc_redis.default');
 
         try {
-            $account = $em->find('BankBundle:Account', $accountId, LockMode::OPTIMISTIC, $version);
-            $balance = $account->getBalance() + $amount;
+            $account = $em->find('BankBundle:Account', $accountId);
+            $redis->multi();
+            $redis->hincrby($account->getAccount(), 'balance', $amount);
+            $redis->hincrby($account->getAccount(), 'version', 1);
+            $redis->exec();
+            $balance = $redis->hget($account->getAccount(), 'balance');
 
             $entry = new Entry();
             $entry->setAccount($account);
             $entry->setDatetime($createTime);
             $entry->setBalance($balance);
             $entry->setAmount($amount);
-            $account->setBalance($balance);
             $em->persist($entry);
             $em->flush();
-            $em->getConnection()->commit();
-        } catch (OptimisticLockException  $e) {
-            $em->getConnection()->rollBack();
+        } catch (Exception  $e) {
 
             throw $e;
         }
@@ -90,30 +88,32 @@ class BankController extends Controller
     public function withdrawAction(Request $request, $accountId)
     {
         $em = $this->getDoctrine()->getManager();
-        $em->getConnection()->beginTransaction();
         $amount = $request->request->get('amount') * -1;
         $createTime = new \DateTime();
-        $version = $em->find('BankBundle:Account', $accountId)->getVersion();
+        $redis = $this->container->get('snc_redis.default');
 
         try {
-            $account = $em->find('BankBundle:Account', $accountId, LockMode::OPTIMISTIC, $version);
-            $balance = $account->getBalance() + $amount;
+            $account = $em->find('BankBundle:Account', $accountId);
+            $checkBalance = intval($redis->hget($account->getAccount(), 'balance'));
 
-            if ($balance < 0) {
+            if (intval($checkBalance) < 0) {
                 return new JsonResponse(['status' => "failure"]);
             }
+
+            $redis->multi();
+            $redis->hincrby($account->getAccount(), 'balance', $amount);
+            $redis->hincrby($account->getAccount(), 'version', 1);
+            $redis->exec();
+            $balance = $redis->hget($account->getAccount(), 'balance');
 
             $entry = new Entry();
             $entry->setAccount($account);
             $entry->setDatetime($createTime);
             $entry->setBalance($balance);
             $entry->setAmount($amount);
-            $account->setBalance($balance);
             $em->persist($entry);
             $em->flush();
-            $em->getConnection()->commit();
         } catch (Exception $e) {
-            $em->getConnection()->rollBack();
 
             throw $e;
         }
