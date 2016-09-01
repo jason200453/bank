@@ -96,7 +96,7 @@ class BankController extends Controller
             $account = $em->find('BankBundle:Account', $accountId);
             $checkBalance = intval($redis->hget($account->getAccount(), 'balance'));
 
-            if (intval($checkBalance) < 0) {
+            if (intval($checkBalance) <= 0) {
                 return new JsonResponse(['status' => "failure"]);
             }
 
