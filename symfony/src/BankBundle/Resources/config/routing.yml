@@ -1,0 +1,3 @@
+delete_account:
+    path: /bank/delete/{accountId}
+    defaults:{_controller: BankBundle:bank:delete}

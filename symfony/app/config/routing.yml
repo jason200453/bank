@@ -1,0 +1,13 @@
+bank:
+    resource: "@BankBundle/Controller/" 
+    type:     annotation
+    prefix:   /
+
+message_bundle_message:
+    resource: "@MessageBundleMessageBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
