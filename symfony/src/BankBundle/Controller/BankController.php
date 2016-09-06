@@ -37,6 +37,7 @@ class BankController extends Controller
         $account->setAccount($accountNumber);
         $account->setName($name);
         $account->setPhone($phone);
+        $account->setVersion(0);
         $em->persist($account);
         $em->flush();
 
