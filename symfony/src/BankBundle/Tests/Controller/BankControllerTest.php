@@ -36,6 +36,25 @@ class BankControllerTest extends WebTestCase
     }
 
     /**
+     * 測試listAction列出單張交易名細
+     *
+     * @group list
+     */
+    public function testListEntrySuccess()
+    {
+        $client = static::createClient();
+        $client->request('GET', '/bank/list?entry_id=1');
+
+        $json = $client->getResponse()->getContent();
+        $output = json_decode($json, true);
+
+        $this->assertEquals(1, $output[0]['id']);
+        $this->assertEquals(2000, $output[0]['amount']);
+        $this->assertEquals(1, $output[0]['account']['id']);
+        $this->assertEquals(2000, $output[0]['balance']);
+    }
+
+    /**
      * 測試listAction列出交易名細失敗
      *
      * @group list

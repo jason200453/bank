@@ -13,7 +13,7 @@ class LoadEntryData extends AbstractFixture implements DependentFixtureInterface
         $entry = new Entry();
         $entry->setAccount($this->getReference('jason'));
         $entry->setamount(2000);
-        $createTime = new \DateTime();
+        $createTime = new \DateTime('2016-09-06 14:34:15');
         $entry->setDatetime($createTime);
         $entry->setBalance(2000);
 
@@ -26,4 +26,3 @@ class LoadEntryData extends AbstractFixture implements DependentFixtureInterface
         return ['BankBundle\DataFixtures\ORM\LoadAccountData'];
     }
 }
-

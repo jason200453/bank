@@ -14,6 +14,7 @@ class LoadAccountData extends AbstractFixture
         $account->setName('jason');
         $account->setPhone('0971568742');
         $account->setBalance(2000);
+        $account->setVersion(0);
 
         $manager->persist($account);
         $manager->flush();
