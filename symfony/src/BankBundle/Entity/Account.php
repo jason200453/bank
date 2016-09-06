@@ -49,8 +49,9 @@ class Account
     private $balance = null;
 
     /**
-     * @ORM\Version
-     * @ORM\Column(type="integer")
+     * Version
+     *
+     * @ORM\Column(type="integer", nullable = true)
      */
     private $version;
 
@@ -177,35 +178,15 @@ class Account
     }
 
     /**
-     * 新增明細
+     * 創建Version
      *
-     * @param \BankBundle\Entity\Entry $entry
+     * @param integer $version
      * @return Account
      */
-    public function addEntry(\BankBundle\Entity\Entry $entry)
+    public function setVersion($version)
     {
-        $this->entry[] = $entry;
+        $this->version = $version;
 
         return $this;
-    }
-
-    /**
-     * 移除明細
-     *
-     * @param \BankBundle\Entity\Entry $entry
-     */
-    public function removeEntry(\BankBundle\Entity\Entry $entry)
-    {
-        $this->entry->removeElement($entry);
-    }
-
-    /**
-     * 取得明細
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getEntry()
-    {
-        return $this->entry;
     }
 }
