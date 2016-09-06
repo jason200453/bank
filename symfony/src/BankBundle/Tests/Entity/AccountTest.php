@@ -2,36 +2,26 @@
 namespace BankBundle\Tests\Entity;
 
 use Liip\FunctionalTestBundle\Test\WebTestCase;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use BankBundle\Entity\Account;
 
-class AccountTest extends WebTestCase implements ContainerAwareInterface
+class AccountTest extends WebTestCase
 {
-    public function setUp()
-    {
-        $classes = [
-            'BankBundle\DataFixtures\ORM\LoadAccountData',
-            'BankBundle\DataFixtures\ORM\LoadEntryData',
-        ];
-
-        $this->loadFixtures($classes);
-    }
-
-    public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
-
     /**
      * 測試Account Entity
      */
     public function testEntry()
     {
-        $em = $this->getContainer()->get('doctrine')->getManager();
+        $account = new Account();
 
-        $account = $em->find('BankBundle:Account', 1);
+        $account->setAccount('1234567890');
+        $account->setBalance(2000);
+        $account->setName('jason');
+        $account->setPhone('0971568742');
+        $account->setVersion(0);
 
-        $this->assertEquals(1, $account->getId());
+        $this->assertNull($account->getId());
         $this->assertEquals(0, $account->getVersion());
+        $this->assertEquals('1234567890', $account->getAccount());
         $this->assertEquals('jason', $account->getName());
         $this->assertEquals('0971568742', $account->getPhone());
         $this->assertEquals(2000, $account->getBalance());
