@@ -60,8 +60,9 @@ class BankController extends Controller
         try {
             $account = $em->find('BankBundle:Account', $accountId);
             $redis->multi();
-            $redis->hincrby($account->getAccount(), 'balance', $amount);
-            $redis->hincrby($account->getAccount(), 'version', 1);
+            $redis->hincrby($accountId, 'balance', $amount);
+            $redis->hincrby($accountId, 'version', 1);
+            $redis->sadd('account', $accountId);
             $result = $redis->exec();
             $balance = $result[0];
 
@@ -95,16 +96,22 @@ class BankController extends Controller
 
         try {
             $account = $em->find('BankBundle:Account', $accountId);
-            $checkBalance = $redis->hget($account->getAccount(), 'balance');
 
-            if (intval($checkBalance) + $amount < 0) {
+            $redis->multi();
+            $redis->hincrby($accountId, 'balance', $amount);
+            $redis->hincrby($accountId, 'version', 1);
+            $redis->sadd('account', $accountId);
+            $result = $redis->exec();
+
+            if ($result[0] < 0) {
+                $redis->multi();
+                $redis->hincrby($accountId, 'balance', $amount * -1);
+                $redis->hincrby($accountId, 'version', 1);
+                $redis->exec();
+
                 return new JsonResponse(['status' => "failure"]);
             }
 
-            $redis->multi();
-            $redis->hincrby($account->getAccount(), 'balance', $amount);
-            $redis->hincrby($account->getAccount(), 'version', 1);
-            $result = $redis->exec();
             $balance = $result[0];
 
             $entry = new Entry();
