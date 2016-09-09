@@ -6,12 +6,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
-class TransmissionCommand extends ContainerAwareCommand
+class BalanceCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
-        $this->setName('transmission');
-        $this->setDescription('Transmission.');
+        $this->setName('balance');
+        $this->setDescription('Balance.');
         $this->setHelp("This command allows you to transmission balance.");
     }
 
