@@ -15,7 +15,6 @@ class Entry
     /**
      * @ORM\Id
      * @ORM\Column(type = "integer")
-     * @ORM\GeneratedValue
      */
     private $id = null;
 
@@ -146,5 +145,18 @@ class Entry
     public function getAccount()
     {
         return $this->account;
+    }
+
+    /**
+     * 創建id
+     *
+     * @param integer $id
+     * @return Entry
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 }
