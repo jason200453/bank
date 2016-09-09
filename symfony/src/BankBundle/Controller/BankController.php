@@ -54,25 +54,30 @@ class BankController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $amount = $request->request->get('amount');
-        $createTime = new \DateTime();
+        $createTime = date('Y-m-d H:i:s');
         $redis = $this->container->get('snc_redis.default');
 
         try {
             $account = $em->find('BankBundle:Account', $accountId);
+
             $redis->multi();
+            $redis->incr('entryId');
             $redis->hincrby($accountId, 'balance', $amount);
             $redis->hincrby($accountId, 'version', 1);
             $redis->sadd('account', $accountId);
             $result = $redis->exec();
-            $balance = $result[0];
+            $entryId = $result[0];
+            $balance = $result[1];
 
-            $entry = new Entry();
-            $entry->setAccount($account);
-            $entry->setDatetime($createTime);
-            $entry->setBalance($balance);
-            $entry->setAmount($amount);
-            $em->persist($entry);
-            $em->flush();
+            $entry = [
+                'entry_id' => $entryId,
+                'account_id' => $accountId,
+                'amount' => $amount,
+                'balance' => $balance,
+                'datetime' => $createTime,
+            ];
+
+            $redis->rpush('entry',  json_encode($entry));
         } catch (Exception  $e) {
 
             throw $e;
@@ -91,20 +96,22 @@ class BankController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $amount = $request->request->get('amount') * -1;
-        $createTime = new \DateTime();
+        $createTime = date('Y-m-d H:i:s');
         $redis = $this->container->get('snc_redis.default');
 
         try {
             $account = $em->find('BankBundle:Account', $accountId);
 
             $redis->multi();
+            $redis->incr('entryId');
             $redis->hincrby($accountId, 'balance', $amount);
             $redis->hincrby($accountId, 'version', 1);
             $redis->sadd('account', $accountId);
             $result = $redis->exec();
 
-            if ($result[0] < 0) {
+            if ($result[1] < 0) {
                 $redis->multi();
+                $redis->decr('entryId');
                 $redis->hincrby($accountId, 'balance', $amount * -1);
                 $redis->hincrby($accountId, 'version', 1);
                 $redis->exec();
@@ -112,15 +119,18 @@ class BankController extends Controller
                 return new JsonResponse(['status' => "failure"]);
             }
 
-            $balance = $result[0];
+            $entryId = $result[0];
+            $balance = $result[1];
 
-            $entry = new Entry();
-            $entry->setAccount($account);
-            $entry->setDatetime($createTime);
-            $entry->setBalance($balance);
-            $entry->setAmount($amount);
-            $em->persist($entry);
-            $em->flush();
+            $entry = [
+                'entry_id' => $entryId,
+                'account_id' => $accountId,
+                'amount' => $amount,
+                'balance' => $balance,
+                'datetime' => $createTime,
+            ];
+
+            $redis->rpush('entry',  json_encode($entry));
         } catch (Exception $e) {
 
             throw $e;
