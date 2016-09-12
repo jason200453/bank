@@ -7,13 +7,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use BankBundle\Entity\Entry;
 
-class EntryCommand extends ContainerAwareCommand
+class UpdateentryCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
-        $this->setName('entry');
-        $this->setDescription('Entry.');
-        $this->setHelp("This command allows you to transmission entry.");
+        $this->setName('updateentry');
+        $this->setDescription('Update entry to mysql.');
+        $this->setHelp("This command allows you to update entry from redis to mysql.");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
