@@ -28,13 +28,13 @@ class EntryCommand extends ContainerAwareCommand
 
             for ($i = 0; $i < $countEntry; $i++) {
                 $entryDetail = $redis->lpop('entry');
-                $detail = json_decode($entryDetail);
+                $detail = json_decode($entryDetail, true);
 
-                $accountId = $detail->account_id;
-                $entryId = $detail->entry_id;
-                $datetime = $detail->datetime;
-                $amount = $detail->amount;
-                $balance = $detail->balance;
+                $accountId = $detail['account_id'];
+                $entryId = $detail['entry_id'];
+                $datetime = $detail['datetime'];
+                $amount = $detail['amount'];
+                $balance = $detail['balance'];
 
                 $account = $em->find('BankBundle:Account', $accountId);
 
