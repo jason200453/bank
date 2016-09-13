@@ -22,6 +22,8 @@ class UpdateentryCommand extends ContainerAwareCommand
 
         $redis = $this->getContainer()->get('snc_redis.default');
 
+        $logger = $this->getContainer()->get('logger');
+
         try {
             $countEntry = $redis->llen('entry');
             $batchSize = 20;
@@ -67,6 +69,7 @@ class UpdateentryCommand extends ContainerAwareCommand
             ];
 
             $redis->lpush('entry', json_encode($entry));
+            $logger->error($e);
 
             throw $e;
         }
