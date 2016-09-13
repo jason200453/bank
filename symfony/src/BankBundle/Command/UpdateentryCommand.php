@@ -56,10 +56,22 @@ class UpdateentryCommand extends ContainerAwareCommand
             $em->flush();
             $em->clear();
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
+
+            $entry = [
+                'entry_id' => $entryId,
+                'account_id' => $accountId,
+                'amount' => $amount,
+                'balance' => $balance,
+                'datetime' => $datetime,
+            ];
+
+            $redis->lpush('entry', json_encode($entry));
 
             throw $e;
         }
+
+        $output->writeln('執行筆數:'.$countEntry);
     }
 }
 
