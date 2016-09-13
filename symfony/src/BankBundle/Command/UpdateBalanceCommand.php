@@ -6,13 +6,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
-class BalanceCommand extends ContainerAwareCommand
+class UpdateBalanceCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
-        $this->setName('balance');
-        $this->setDescription('Balance.');
-        $this->setHelp("This command allows you to transmission balance.");
+        $this->setName('update-balance');
+        $this->setDescription('Update Balance to mysql.');
+        $this->setHelp("This command allows you to update balance from redis to mysql.");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -20,6 +20,8 @@ class BalanceCommand extends ContainerAwareCommand
         $em = $this->getContainer()->get('doctrine')->getManager();
 
         $redis = $this->getContainer()->get('snc_redis.default');
+
+        $logger = $this->getContainer()->get('logger');
 
         try {
             $accounts = $redis->smembers('account');
@@ -38,8 +40,11 @@ class BalanceCommand extends ContainerAwareCommand
             }
 
         } catch (Exception $e) {
+            $logger->error($e->getMessage());
 
             throw $e;
         }
+
+        $output->writeln('UpdateBalance執行成功，執行筆數:'.count($accounts));
     }
 }

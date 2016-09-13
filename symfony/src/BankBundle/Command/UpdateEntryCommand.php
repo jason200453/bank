@@ -7,11 +7,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use BankBundle\Entity\Entry;
 
-class UpdateentryCommand extends ContainerAwareCommand
+class UpdateEntryCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
-        $this->setName('updateentry');
+        $this->setName('update-entry');
         $this->setDescription('Update entry to mysql.');
         $this->setHelp("This command allows you to update entry from redis to mysql.");
     }
@@ -26,7 +26,7 @@ class UpdateentryCommand extends ContainerAwareCommand
 
         try {
             $countEntry = $redis->llen('entry');
-            $batchSize = 20;
+            $batchSize = 100;
 
             for ($i = 0; $i < $countEntry; $i++) {
                 $entryDetail = $redis->lpop('entry');
@@ -69,12 +69,12 @@ class UpdateentryCommand extends ContainerAwareCommand
             ];
 
             $redis->lpush('entry', json_encode($entry));
-            $logger->error($e);
+            $logger->error($e->getMessage());
 
             throw $e;
         }
 
-        $output->writeln('執行筆數:'.$countEntry);
+        $output->writeln('UpdateEntry執行成功，執行筆數:'.$countEntry);
     }
 }
 
