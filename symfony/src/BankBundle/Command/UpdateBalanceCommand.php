@@ -45,6 +45,6 @@ class UpdateBalanceCommand extends ContainerAwareCommand
             throw $e;
         }
 
-        $output->writeln('UpdateBalance執行成功，執行筆數:'.count($accounts));
+        $output->writeln('['.date('Y-m-d H:i:s').']'.'UpdateBalance執行成功，執行筆數:'.count($accounts));
     }
 }

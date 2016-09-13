@@ -74,7 +74,7 @@ class UpdateEntryCommand extends ContainerAwareCommand
             throw $e;
         }
 
-        $output->writeln('UpdateEntry執行成功，執行筆數:'.$countEntry);
+        $output->writeln('['.date('Y-m-d H:i:s').']'.'UpdateEntry執行成功，執行筆數:'.$countEntry);
     }
 }
 
