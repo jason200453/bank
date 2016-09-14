@@ -60,11 +60,11 @@ class UpdateEntryCommand extends ContainerAwareCommand
 
             $countEntries = count($entries);
 
-            for ($i = 0; $i < $countEntries; $i++) {
+            for ($i = $countEntries - 1; $i >= 0; $i--) {
                 $redis->lpush('entry', json_encode($entries[$i]));
             }
 
-            $output->writeln('['.date('Y-m-d H:i:s').']'.'UpdateEntry執行失敗，redis已重新備份');
+            $output->writeln('['.date('Y-m-d H:i:s').']'.'UpdateEntry執行失敗，redis已回推');
             $logger->error($e->getMessage());
 
             throw $e;
