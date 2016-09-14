@@ -1,4 +1,5 @@
 <?php
+
 namespace BankBundle\Tests\Entity;
 
 use Liip\FunctionalTestBundle\Test\WebTestCase;

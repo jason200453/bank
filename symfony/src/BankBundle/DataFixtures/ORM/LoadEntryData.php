@@ -1,4 +1,5 @@
 <?php
+
 namespace BankBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
