@@ -25,12 +25,16 @@ class UpdateEntryCommand extends ContainerAwareCommand
         $logger = $this->getContainer()->get('logger');
 
         try {
-            $countEntry = $redis->llen('entry');
-            $batchSize = 100;
 
-            for ($i = 0; $i < $countEntry; $i++) {
+            for ($i = 0; $i < 1000; $i++) {
                 $entryDetail = $redis->lpop('entry');
                 $detail = json_decode($entryDetail, true);
+
+                if (!$entryDetail) {
+                    break;
+                }
+
+                $entries[] = $detail;
 
                 $accountId = $detail['account_id'];
                 $entryId = $detail['entry_id'];
@@ -47,12 +51,6 @@ class UpdateEntryCommand extends ContainerAwareCommand
                 $entry->setBalance($balance);
                 $entry->setAmount($amount);
                 $em->persist($entry);
-
-                if (($i % $batchSize) == 0) {
-                    $em->flush();
-                    $em->clear();
-                }
-
             }
 
             $em->flush();
@@ -60,21 +58,18 @@ class UpdateEntryCommand extends ContainerAwareCommand
 
         } catch (\Exception $e) {
 
-            $entry = [
-                'entry_id' => $entryId,
-                'account_id' => $accountId,
-                'amount' => $amount,
-                'balance' => $balance,
-                'datetime' => $datetime,
-            ];
+            $countEntries = count($entries);
 
-            $redis->lpush('entry', json_encode($entry));
+            for ($i = 0; $i < $countEntries; $i++) {
+                $redis->lpush('entry', json_encode($entries[$i]));
+            }
+
+            $output->writeln('['.date('Y-m-d H:i:s').']'.'UpdateEntry執行失敗，redis已重新備份');
             $logger->error($e->getMessage());
 
             throw $e;
         }
 
-        $output->writeln('['.date('Y-m-d H:i:s').']'.'UpdateEntry執行成功，執行筆數:'.$countEntry);
+        $output->writeln('['.date('Y-m-d H:i:s').']'.'UpdateEntry執行成功');
     }
 }
-
