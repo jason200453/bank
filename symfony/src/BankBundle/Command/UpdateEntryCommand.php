@@ -57,11 +57,10 @@ class UpdateEntryCommand extends ContainerAwareCommand
             $em->clear();
 
         } catch (\Exception $e) {
+            krsort($entries);
 
-            $countEntries = count($entries);
-
-            for ($i = $countEntries - 1; $i >= 0; $i--) {
-                $redis->lpush('entry', json_encode($entries[$i]));
+            foreach ($entries as $entry) {
+                $redis->lpush('entry', json_encode($entry));
             }
 
             $output->writeln('['.date('Y-m-d H:i:s').']'.'UpdateEntry執行失敗，redis已回推');
