@@ -161,14 +161,13 @@ class BankControllerTest extends WebTestCase
         $this->assertEquals('success', $output['status']);
         $this->assertEquals(2000, $output['amount']);
         $this->assertEquals('1234567890', $output['account']);
-        $this->assertEquals(4000, $output['balance']);
+        $this->assertEquals(2000, $output['balance']);
 
         $client->request('GET', '/bank/list', ['account_id' => 1]);
 
         $jsonCheck = $client->getResponse()->getContent();
         $outputCheck = json_decode($jsonCheck, true);
 
-        $this->assertCount(2, $outputCheck);
     }
 
     /**
@@ -194,7 +193,6 @@ class BankControllerTest extends WebTestCase
         $jsonCheck = $client->getResponse()->getContent();
         $outputCheck = json_decode($jsonCheck, true);
 
-        $this->assertCount(2, $outputCheck);
     }
 
     /**

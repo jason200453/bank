@@ -12,6 +12,7 @@ class LoadEntryData extends AbstractFixture implements DependentFixtureInterface
     public function load(ObjectManager $manager)
     {
         $entry = new Entry();
+        $entry->setId(1);
         $entry->setAccount($this->getReference('jason'));
         $entry->setamount(2000);
         $createTime = new \DateTime('2016-09-06 14:34:15');
