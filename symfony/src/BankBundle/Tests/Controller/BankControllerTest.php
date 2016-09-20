@@ -3,6 +3,7 @@
 namespace BankBundle\Tests\Controller;
 
 use Liip\FunctionalTestBundle\Test\WebTestCase;
+use Exception;
 
 class BankControllerTest extends WebTestCase
 {
@@ -14,6 +15,7 @@ class BankControllerTest extends WebTestCase
         ];
 
         $this->loadFixtures($classes);
+
     }
 
     /**
@@ -163,11 +165,6 @@ class BankControllerTest extends WebTestCase
         $this->assertEquals('1234567890', $output['account']);
         $this->assertEquals(2000, $output['balance']);
 
-        $client->request('GET', '/bank/list', ['account_id' => 1]);
-
-        $jsonCheck = $client->getResponse()->getContent();
-        $outputCheck = json_decode($jsonCheck, true);
-
     }
 
     /**
@@ -188,11 +185,6 @@ class BankControllerTest extends WebTestCase
         $this->assertEquals('1234567890', $output['account']);
         $this->assertEquals(0, $output['balance']);
 
-        $client->request('GET', '/bank/list', ['account_id' => 1]);
-
-        $jsonCheck = $client->getResponse()->getContent();
-        $outputCheck = json_decode($jsonCheck, true);
-
     }
 
     /**
@@ -209,5 +201,22 @@ class BankControllerTest extends WebTestCase
         $output = json_decode($json, true);
 
         $this->assertEquals('failure', $output['status']);
+    }
+
+    /**
+     * 測試withdrawAction領錢例外
+     *
+     * @group withdraw
+     */
+    public function testWithdrawException()
+    {
+        $client = static::createClient();
+        $redis = $this->getMockBuilder('redis')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $redis->method('redis')
+            ->will($this->throwException(new Exception));
+
+        $client->request('POST', '/bank/withdraw/1', ['amount' => 1000]);
     }
 }
