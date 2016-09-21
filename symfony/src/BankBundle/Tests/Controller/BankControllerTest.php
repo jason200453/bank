@@ -211,11 +211,15 @@ class BankControllerTest extends WebTestCase
     public function testWithdrawException()
     {
         $client = static::createClient();
-        $redis = $this->getMockBuilder('redis')
+        $redis = $client->getContainer()->get('snc_redis.default');
+        $mock = $this->getMockBuilder(get_class($redis))
             ->disableOriginalConstructor()
             ->getMock();
-        $redis->method('redis')
+
+        $mock->method('sadd')
             ->will($this->throwException(new Exception));
+
+        $client->getContainer()->set('snc_redis.default', $mock);
 
         $client->request('POST', '/bank/withdraw/1', ['amount' => 1000]);
     }
