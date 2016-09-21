@@ -59,6 +59,10 @@ class BankController extends Controller
         try {
             $account = $em->find('BankBundle:Account', $accountId);
 
+            if (!$account) {
+                throw new \Exception('Something went wrong!');
+            }
+
             $redis->multi();
             $redis->incr('entryId');
             $redis->hincrby($accountId, 'balance', $amount);
@@ -100,6 +104,10 @@ class BankController extends Controller
 
         try {
             $account = $em->find('BankBundle:Account', $accountId);
+
+            if (!$account) {
+                throw new \Exception('Something went wrong!');
+            }
 
             $redis->multi();
             $redis->incr('entryId');
