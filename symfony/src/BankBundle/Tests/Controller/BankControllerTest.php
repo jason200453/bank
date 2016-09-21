@@ -211,16 +211,17 @@ class BankControllerTest extends WebTestCase
     public function testWithdrawException()
     {
         $client = static::createClient();
-        $redis = $client->getContainer()->get('snc_redis.default');
-        $mock = $this->getMockBuilder(get_class($redis))
-            ->disableOriginalConstructor()
-            ->getMock();
+        $client->request('POST', '/bank/withdraw/999', ['amount' => 1000]);
+    }
 
-        $mock->method('sadd')
-            ->will($this->throwException(new Exception));
-
-        $client->getContainer()->set('snc_redis.default', $mock);
-
-        $client->request('POST', '/bank/withdraw/1', ['amount' => 1000]);
+    /**
+     * 測試depositAction領錢例外
+     *
+     * @group deposit
+     */
+    public function testDepositException()
+    {
+        $client = static::createClient();
+        $client->request('POST', '/bank/deposit/999', ['amount' => 1000]);
     }
 }
