@@ -220,6 +220,10 @@ class BankControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $client->request('POST', '/bank/withdraw/999', ['amount' => 1000]);
+
+        $output = $client->getResponse()->getContent();
+
+        $this->assertContains('Something went wrong!', $output);
     }
 
     /**
@@ -231,5 +235,9 @@ class BankControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $client->request('POST', '/bank/deposit/999', ['amount' => 1000]);
+
+        $output = $client->getResponse()->getContent();
+
+        $this->assertContains('Something went wrong!', $output);
     }
 }
