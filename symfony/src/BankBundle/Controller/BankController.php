@@ -81,7 +81,7 @@ class BankController extends Controller
             ];
 
             $redis->rpush('entry',  json_encode($entry));
-        } catch (Exception  $e) {
+        } catch (\Exception  $e) {
 
             throw $e;
         }
@@ -138,7 +138,7 @@ class BankController extends Controller
             ];
 
             $redis->rpush('entry',  json_encode($entry));
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
 
             throw $e;
         }
