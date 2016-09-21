@@ -210,4 +210,26 @@ class BankControllerTest extends WebTestCase
 
         $this->assertEquals('failure', $output['status']);
     }
+
+    /**
+     * 測試withdrawAction領錢例外
+     *
+     * @group withdraw
+     */
+    public function testWithdrawException()
+    {
+        $client = static::createClient();
+        $client->request('POST', '/bank/withdraw/999', ['amount' => 1000]);
+    }
+
+    /**
+     * 測試depositAction存錢例外
+     *
+     * @group deposit
+     */
+    public function testDepositException()
+    {
+        $client = static::createClient();
+        $client->request('POST', '/bank/deposit/999', ['amount' => 1000]);
+    }
 }
