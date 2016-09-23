@@ -39,7 +39,7 @@ class UpdateBalanceCommand extends ContainerAwareCommand
                 $redis->srem('account', $accounts[$i]);
             }
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $logger->error($e->getMessage());
 
             throw $e;
